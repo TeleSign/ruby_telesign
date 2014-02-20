@@ -1,3 +1,3 @@
-module RubyTelesign
+module Telesign
   VERSION = "0.0.1"
 end

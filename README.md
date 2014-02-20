@@ -1,8 +1,8 @@
-ruby_telesign
+telesign
 =============
 
 Ruby TeleSign SDK
 
-Coming soon ... 
+Coming soon ...
 
 Don't want to wait? Fork it!

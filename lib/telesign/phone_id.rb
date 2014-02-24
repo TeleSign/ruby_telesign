@@ -70,10 +70,10 @@ module Telesign
       method = 'GET'
 
       headers = Telesign::Auth.generate_auth_headers(
-          @customer_id,
-          @secret_key,
-          resource,
-          method)
+          customer_id: @customer_id,
+          secret_key: @secret_key,
+          resource: resource,
+          method: method)
 
       response = @conn.get do |req|
           req.url resource
@@ -144,10 +144,10 @@ module Telesign
       method = 'GET'
 
       headers = Telesign::Auth.generate_auth_headers(
-          @customer_id,
-          @secret_key,
-          resource,
-          method)
+          customer_id: @customer_id,
+          secret_key: @secret_key,
+          resource: resource,
+          method: method)
 
       response = @conn.get do |req|
           req.url resource
@@ -222,10 +222,10 @@ module Telesign
       method = 'GET'
 
       headers = Telesign::Auth.generate_auth_headers(
-          @customer_id,
-          @secret_key,
-          resource,
-          method)
+          customer_id: @customer_id,
+          secret_key: @secret_key,
+          resource: resource,
+          method: method)
 
       response = @conn.get do |req|
           req.url resource
@@ -300,10 +300,10 @@ module Telesign
       method = 'GET'
 
       headers = Telesign::Auth.generate_auth_headers(
-          @customer_id,
-          @secret_key,
-          resource,
-          method)
+          customer_id: @customer_id,
+          secret_key: @secret_key,
+          resource: resource,
+          method: method)
 
       response = @conn.get do |req|
           req.url resource

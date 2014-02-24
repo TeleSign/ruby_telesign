@@ -34,7 +34,7 @@ module Telesign
       super(api_host, customer_id, secret_key, ssl, proxy_host)
     end
 
-    def sms phone_number, verify_code=nil, language='en', template=''
+    def sms phone_number, verify_code=nil, language='en-US', template=''
       # """
       # Sends a text message containing the verification code, to the specified phone number (supported for mobile phones only).
 
@@ -88,8 +88,8 @@ module Telesign
         verify_code = random_with_N_digits(5)
       end
 
-      resource = "/v1/verify/sms"
-      method = "POST"
+      resource = '/v1/verify/sms'
+      method = 'POST'
 
       fields = {
           phone_number: phone_number,
@@ -98,17 +98,17 @@ module Telesign
           template: template}
 
       headers = Telesign::Auth.generate_auth_headers(
-          @customer_id,
-          @secret_key,
-          resource,
-          method,
-          fields=fields)
+          customer_id: @customer_id,
+          secret_key: @secret_key,
+          resource: resource,
+          method: method,
+          fields: fields)
 
       response = @conn.post do |req|
           req.url resource
           req.body = "{\"data\":{#{fields.map{|k,v| "\"#{k}\":\"#{v}\""}.join(',')}}}" #{data: fields}
           req.headers = headers
-          req.headers['Content-Type'] = 'application/json'
+          # req.headers['Content-Type'] = 'application/json'
           # proxies=@proxy
       end
 
@@ -168,8 +168,8 @@ module Telesign
         verify_code = random_with_N_digits(5)
       end
 
-      resource = "/v1/verify/call"
-      method = "POST"
+      resource = '/v1/verify/call'
+      method = 'POST'
 
       fields = {
           phone_number: phone_number,
@@ -177,17 +177,17 @@ module Telesign
           verify_code: verify_code}
 
       headers = Telesign::Auth.generate_auth_headers(
-          @customer_id,
-          @secret_key,
-          resource,
-          method,
-          fields=fields)
+          customer_id: @customer_id,
+          secret_key: @secret_key,
+          resource: resource,
+          method: method,
+          fields: fields)
 
       response = @conn.post do |req|
           req.url resource
           req.body = "{\"data\":{#{fields.map{|k,v| "\"#{k}\":\"#{v}\""}.join(',')}}}" #{data: fields}
           req.headers = headers
-          req.headers['Content-Type'] = 'application/json'
+          # req.headers['Content-Type'] = 'application/json'
           # proxies=@proxy
       end
 
@@ -234,13 +234,13 @@ module Telesign
       # """
 
       resource = "/v1/verify/%s" % ref_id
-      method = "GET"
+      method = 'GET'
 
       headers = Telesign::Auth.generate_auth_headers(
-          @customer_id,
-          @secret_key,
-          resource,
-          method)
+          customer_id: @customer_id,
+          secret_key: @secret_key,
+          resource: resource,
+          method: method)
 
       fields = nil
       if !verify_code.nil?

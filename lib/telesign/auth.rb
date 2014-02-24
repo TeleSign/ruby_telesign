@@ -20,48 +20,47 @@ AUTH_METHOD = {
 
 module Telesign
   class Auth
-    def self.generate_auth_headers(
-            customer_id,
-            secret_key,
-            resource,
-            method,
-            content_type='',
-            auth_method=:sha1,
-            fields=nil)
+    def self.generate_auth_headers(opts = {})
+      content_type = opts[:content_type] ? opts[:content_type] : ''
+      auth_method = opts[:auth_method] ? opts[:auth_method] : :sha1
+      fields = opts[:fields] ? opts[:fields] : nil
 
-        current_date = Time.mktime(*Time.now.to_a).to_s
-        nonce = SecureRandom.uuid
+      customer_id = opts[:customer_id]
+      secret_key = opts[:secret_key]
+      resource = opts[:resource]
+      method = opts[:method]
 
-        if %w(POST PUT).include? method
-          content_type = "application/x-www-form-urlencoded"
-        end
+      current_date = Time.mktime(*Time.now.to_a).strftime("%a, %d %b %Y %H:%M:%S %z")
+      nonce = SecureRandom.uuid
 
-        string_to_sign = "%s\n%s\n\nx-ts-auth-method:%s\nx-ts-date:%s\nx-ts-nonce:%s" % [
-                method,
-                content_type,
-                AUTH_METHOD[auth_method][:name],
-                current_date,
-                nonce]
+      if %w(POST PUT).include? method
+        content_type = "application/x-www-form-urlencoded"
+      end
 
-        if fields
-          string_to_sign += "\n%s" % URI.encode(fields.map{|k,v| "#{k}=#{v}"}.join('&'))
-        end
+      string_to_sign = "%s\n%s\n\nx-ts-auth-method:%s\nx-ts-date:%s\nx-ts-nonce:%s" % [
+              method,
+              content_type,
+              AUTH_METHOD[auth_method][:name],
+              current_date,
+              nonce]
 
-        string_to_sign += "\n%s" % resource
+      if fields
+        string_to_sign += "\n%s" % URI.encode(fields.map{|k,v| "#{k}=#{v}"}.join('&'))
+      end
 
-        digest = AUTH_METHOD[auth_method][:hash].new
-        signer = OpenSSL::HMAC.digest digest, Base64.decode64(secret_key), string_to_sign
+      string_to_sign += "\n%s" % resource
 
-        signature = Base64.encode64 signer
+      digest = AUTH_METHOD[auth_method][:hash].new
+      signer = OpenSSL::HMAC.digest digest, Base64.decode64(secret_key), string_to_sign
 
-        {
-          'Authorization' => "TSA %s:%s" % [customer_id, signature],
-          'x-ts-date' => current_date,
-          'x-ts-auth-method' => AUTH_METHOD[auth_method][:name],
-          'x-ts-nonce' => nonce
-        }
+      signature = Base64.encode64 signer
+
+      {
+        'Authorization' => "TSA %s:%s" % [customer_id, signature],
+        'x-ts-date' => current_date,
+        'x-ts-auth-method' => AUTH_METHOD[auth_method][:name],
+        'x-ts-nonce' => nonce
+      }
     end
-
-
   end
 end

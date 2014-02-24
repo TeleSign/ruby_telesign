@@ -106,9 +106,8 @@ module Telesign
 
       response = @conn.post do |req|
           req.url resource
-          req.body = "{\"data\":{#{fields.map{|k,v| "\"#{k}\":\"#{v}\""}.join(',')}}}" #{data: fields}
+          req.body = fields
           req.headers = headers
-          # req.headers['Content-Type'] = 'application/json'
           # proxies=@proxy
       end
 
@@ -185,9 +184,8 @@ module Telesign
 
       response = @conn.post do |req|
           req.url resource
-          req.body = "{\"data\":{#{fields.map{|k,v| "\"#{k}\":\"#{v}\""}.join(',')}}}" #{data: fields}
+          req.body = fields
           req.headers = headers
-          # req.headers['Content-Type'] = 'application/json'
           # proxies=@proxy
       end
 

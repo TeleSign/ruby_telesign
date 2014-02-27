@@ -11,10 +11,10 @@ class TestAuth < Minitest::Test
 
   def test_headers_are_set_on_get
     Telesign::Auth.generate_auth_headers(
-            @expected_cid,
-            @expected_secret_key,
-            @expected_resource,
-            'GET')
+            customer_id: @expected_cid,
+            secret_key: @expected_secret_key,
+            resource: @expected_resource,
+            method: 'GET')
   end
 
   def test_nonce_is_set
@@ -22,10 +22,10 @@ class TestAuth < Minitest::Test
 
     headers = SecureRandom.stub :uuid, expected_nonce do
       Telesign::Auth.generate_auth_headers(
-        @expected_cid,
-        @expected_secret_key,
-        @expected_resource,
-        'GET')
+        customer_id: @expected_cid,
+        secret_key: @expected_secret_key,
+        resource: @expected_resource,
+        method: 'GET')
     end
 
     assert_equal headers['x-ts-nonce'], expected_nonce
@@ -33,10 +33,10 @@ class TestAuth < Minitest::Test
 
   def test_date_is_set
     headers = Telesign::Auth.generate_auth_headers(
-                @expected_cid,
-                @expected_secret_key,
-                @expected_resource,
-                'GET')
+                customer_id: @expected_cid,
+                secret_key: @expected_secret_key,
+                resource: @expected_resource,
+                method: 'GET')
 
     # Can't mock datetime
     refute_match headers['x-ts-date'], nil
@@ -46,10 +46,10 @@ class TestAuth < Minitest::Test
     expected_auth_method = 'HMAC-SHA1'
 
     headers = Telesign::Auth.generate_auth_headers(
-                @expected_cid,
-                @expected_secret_key,
-                @expected_resource,
-                'GET')
+                customer_id: @expected_cid,
+                secret_key: @expected_secret_key,
+                resource: @expected_resource,
+                method: 'GET')
 
     assert_equal headers['x-ts-auth-method'], expected_auth_method, 'Auth method did not match'
   end
@@ -58,12 +58,11 @@ class TestAuth < Minitest::Test
     expected_auth_method = 'HMAC-SHA256'
 
     headers = Telesign::Auth.generate_auth_headers(
-                @expected_cid,
-                @expected_secret_key,
-                @expected_resource,
-                'GET',
-                '',
-                :sha256)
+                customer_id: @expected_cid,
+                secret_key: @expected_secret_key,
+                resource: @expected_resource,
+                method: 'GET',
+                auth_method: :sha256)
 
     assert_equal headers['x-ts-auth-method'], expected_auth_method, 'Auth method did not match'
   end
@@ -72,10 +71,10 @@ class TestAuth < Minitest::Test
     expected_auth_start = "TSA %s:" % @expected_cid
 
     headers = Telesign::Auth.generate_auth_headers(
-                @expected_cid,
-                @expected_secret_key,
-                @expected_resource,
-                'GET')
+                customer_id: @expected_cid,
+                secret_key: @expected_secret_key,
+                resource: @expected_resource,
+                method: 'GET')
 
     assert_match /^#{expected_auth_start}/, headers['Authorization'], 'Authorization did not start with TSA and customer ID'
   end

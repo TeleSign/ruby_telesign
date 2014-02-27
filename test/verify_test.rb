@@ -11,7 +11,7 @@ class VerifyTest < Minitest::Test
     @expected_secret_key = '8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M8M=='
     @expected_phone_no = '12343455678'
     @expected_language = 'en'
-    @expected_verify_code = 54321
+    @expected_verify_code = '54321'
     @expected_ref_id = '99999999999999999'
     @expected_data = '{ "a":"AA", "b":"BB" }'
     @expected_sms_resource = 'https://rest.telesign.com/v1/verify/sms'
@@ -23,11 +23,11 @@ class VerifyTest < Minitest::Test
     @acceptance_headers = { 'Accept' => /.*/,
                             'Accept-Encoding' => /.*/,
                             'Authorization' => /.*/,
-                            'Content-Type' => 'application/json',
                             'User-Agent' => /.*/,
                             'X-Ts-Auth-Method' => /.*/,
                             'X-Ts-Date'=> /.*/,
-                            'X-Ts-Nonce' => /.*/}
+                            'X-Ts-Nonce' => /.*/,
+                            'Content-Type'=>'application/x-www-form-urlencoded'}
   end
 
   def test_verify_sms
@@ -37,7 +37,7 @@ class VerifyTest < Minitest::Test
               template: ''}
 
     stub_request(:post, @expected_sms_resource).
-      with( body: "{\"data\":{#{fields.map{|k,v| "\"#{k}\":\"#{v}\""}.join(',')}}}", # {data: fields}, #
+      with( body: fields,
             headers: @acceptance_headers).
         to_return(body: @expected_data, status: 200)
 
@@ -51,7 +51,7 @@ class VerifyTest < Minitest::Test
               verify_code: @expected_verify_code}
 
     stub_request(:post, @expected_call_resource).
-      with( body: "{\"data\":{#{fields.map{|k,v| "\"#{k}\":\"#{v}\""}.join(',')}}}",
+      with( body: fields,
             headers: @acceptance_headers).
         to_return(body: @expected_data, status: 200)
 
@@ -62,11 +62,11 @@ class VerifyTest < Minitest::Test
   def test_verify_sms_default_code
     fields = {phone_number:  @expected_phone_no,
               language: @expected_language,
-              verify_code: '',
+              verify_code: /\d{5}/,
               template: ''}
 
     stub_request(:post, @expected_sms_resource).
-      with( body: /\"verify_code\":\"\d{5}\"/,
+      with( body: fields,
             headers: @acceptance_headers).
         to_return(body: @expected_data, status: 200)
 
@@ -77,10 +77,10 @@ class VerifyTest < Minitest::Test
   def test_verify_call_default_code
     fields = {phone_number:  @expected_phone_no,
               language: @expected_language,
-              verify_code: ''}
+              verify_code: /\d{5}/}
 
     stub_request(:post, @expected_call_resource).
-      with( body: /\"verify_code\":\"\d{5}\"/,
+      with( body: fields,
             headers: @acceptance_headers).
         to_return(body: @expected_data, status: 200)
 

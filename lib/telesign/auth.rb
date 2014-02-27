@@ -30,7 +30,7 @@ module Telesign
       resource = opts[:resource]
       method = opts[:method]
 
-      current_date = Time.mktime(*Time.now.to_a).strftime("%a, %d %b %Y %H:%M:%S %z")
+      current_date = Time.now.strftime("%a, %d %b %Y %H:%M:%S %z")
       nonce = SecureRandom.uuid
 
       if %w(POST PUT).include? method
@@ -64,3 +64,4 @@ module Telesign
     end
   end
 end
+

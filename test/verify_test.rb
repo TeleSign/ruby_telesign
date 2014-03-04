@@ -42,7 +42,9 @@ class VerifyTest < Minitest::Test
         to_return(body: @expected_data, status: 200)
 
     p = Telesign::Verify.new @expected_cid, @expected_secret_key
-    p.sms @expected_phone_no, @expected_verify_code, @expected_language
+    p.sms phone_number: @expected_phone_no,
+          verify_code: @expected_verify_code,
+          language: @expected_language
   end
 
   def test_verify_call
@@ -56,7 +58,9 @@ class VerifyTest < Minitest::Test
         to_return(body: @expected_data, status: 200)
 
     p = Telesign::Verify.new @expected_cid, @expected_secret_key
-    p.call @expected_phone_no, @expected_verify_code, @expected_language
+    p.call phone_number: @expected_phone_no,
+           verify_code: @expected_verify_code,
+           language: @expected_language
   end
 
   def test_verify_sms_default_code
@@ -71,7 +75,8 @@ class VerifyTest < Minitest::Test
         to_return(body: @expected_data, status: 200)
 
     p = Telesign::Verify.new @expected_cid, @expected_secret_key
-    p.sms @expected_phone_no, nil, @expected_language
+    p.sms phone_number: @expected_phone_no,
+          language: @expected_language
   end
 
   def test_verify_call_default_code
@@ -85,7 +90,8 @@ class VerifyTest < Minitest::Test
         to_return(body: @expected_data, status: 200)
 
     p = Telesign::Verify.new @expected_cid, @expected_secret_key
-    p.call @expected_phone_no, nil, @expected_language
+    p.call phone_number: @expected_phone_no,
+           language: @expected_language
   end
 
   def test_status_check

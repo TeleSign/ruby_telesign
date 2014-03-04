@@ -34,7 +34,12 @@ module Telesign
       super(api_host, customer_id, secret_key, ssl, proxy_host)
     end
 
-    def sms phone_number, verify_code=nil, language='en-US', template=''
+    def sms opts = {}
+      phone_number = opts[:phone_number]
+      verify_code = opts[:verify_code]
+      language = opts[:language] || 'en-US'
+      template = opts[:template] || ''
+
       # """
       # Sends a text message containing the verification code, to the specified phone number (supported for mobile phones only).
 
@@ -114,7 +119,11 @@ module Telesign
       return Telesign::Response.new validate_response(response), response, verify_code
     end
 
-    def call phone_number, verify_code=nil, language='en'
+    def call opts = {}
+      phone_number = opts[:phone_number]
+      verify_code = opts[:verify_code]
+      language = opts[:language] || 'en-US'
+
       # """
       # Calls the specified phone number, and using speech synthesis, speaks the verification code to the user.
 

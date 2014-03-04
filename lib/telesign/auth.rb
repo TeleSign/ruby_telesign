@@ -45,7 +45,7 @@ module Telesign
               nonce]
 
       if fields
-        string_to_sign += "\n%s" % URI.encode(fields.map{|k,v| "#{k}=#{v}"}.join('&'))
+        string_to_sign += "\n%s" % URI.encode_www_form(fields)
       end
 
       string_to_sign += "\n%s" % resource

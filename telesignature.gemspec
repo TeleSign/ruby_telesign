@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['akoch@practicefusion.com']
   spec.description   = %q{Client gem for Telesign REST API}
   spec.summary       = %q{Client gem for Telesign REST API}
-  spec.homepage      = ''
+  spec.homepage      = 'https://github.com/practicefusion/telesignature'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files`.split($/)

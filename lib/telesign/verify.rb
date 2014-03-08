@@ -30,8 +30,14 @@ module Telesign
 
     # """
 
-    def initialize customer_id, secret_key, ssl=true, api_host='rest.telesign.com', proxy_host=nil
-      super(api_host, customer_id, secret_key, ssl, proxy_host)
+    def initialize opts = {}
+      super(
+          customer_id: opts[:customer_id],
+          secret_key: opts[:secret_key],
+          ssl: (opts[:ssl] || true),
+          api_host: (opts[:api_host] || 'rest.telesign.com'),
+          proxy_host: (opts[:proxy_host] || nil)
+        )
     end
 
     def sms opts = {}

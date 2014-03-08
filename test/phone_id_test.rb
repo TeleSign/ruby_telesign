@@ -30,7 +30,7 @@ class PhoneIdTest < Minitest::Test
       with( headers: @acceptance_headers).
         to_return(body: @expected_data, status: 200)
 
-    p = Telesign::PhoneId.new @expected_cid, @expected_secret_key
+    p = Telesign::PhoneId.new customer_id: @expected_cid, secret_key: @expected_secret_key
     p.standard @expected_phone_no
   end
 
@@ -41,7 +41,7 @@ class PhoneIdTest < Minitest::Test
       with( headers: @acceptance_headers).
         to_return(body: response_body, status: [401, 'Unauthorized'])
 
-    p = Telesign::PhoneId.new @expected_cid, @expected_secret_key
+    p = Telesign::PhoneId.new customer_id: @expected_cid, secret_key: @expected_secret_key
 
     assert_raises(Telesign::AuthorizationError){
       p.standard(@expected_phone_no)
@@ -55,7 +55,7 @@ class PhoneIdTest < Minitest::Test
       with( headers: @acceptance_headers).
         to_return(body: response_body, status: [502, 'Bad Gateway'])
 
-    p = Telesign::PhoneId.new @expected_cid, @expected_secret_key
+    p = Telesign::PhoneId.new customer_id: @expected_cid, secret_key: @expected_secret_key
 
     assert_raises(Telesign::TelesignError){
       p.standard(@expected_phone_no)
@@ -67,7 +67,7 @@ class PhoneIdTest < Minitest::Test
       with(query: {ucid: 'OTHR'}, headers: @acceptance_headers).
         to_return(body: @expected_data, status: 200)
 
-    p = Telesign::PhoneId.new @expected_cid, @expected_secret_key
+    p = Telesign::PhoneId.new customer_id: @expected_cid, secret_key: @expected_secret_key
     p.score @expected_phone_no, 'OTHR'
   end
 
@@ -76,7 +76,7 @@ class PhoneIdTest < Minitest::Test
       with(query: {ucid: 'OTHR'}, headers: @acceptance_headers).
         to_return(body: @expected_data, status: 200)
 
-    p = Telesign::PhoneId.new @expected_cid, @expected_secret_key
+    p = Telesign::PhoneId.new customer_id: @expected_cid, secret_key: @expected_secret_key
     p.contact @expected_phone_no, 'OTHR'
   end
 
@@ -85,7 +85,7 @@ class PhoneIdTest < Minitest::Test
       with(query: {ucid: 'OTHR'}, headers: @acceptance_headers).
         to_return(body: @expected_data, status: 200)
 
-    p = Telesign::PhoneId.new @expected_cid, @expected_secret_key
+    p = Telesign::PhoneId.new customer_id: @expected_cid, secret_key: @expected_secret_key
     p.live @expected_phone_no, 'OTHR'
   end
 

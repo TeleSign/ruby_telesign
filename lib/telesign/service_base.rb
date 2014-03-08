@@ -5,10 +5,12 @@ module Telesign
   class ServiceBase
     # attr_accessor :customer_id, :secret_key, :api_host
 
-    def initialize api_host, customer_id, secret_key, ssl=true, proxy_host=nil
-      @customer_id = customer_id
-      @secret_key = secret_key
-      @api_host = api_host
+    def initialize opts = {}
+      @customer_id = opts[:customer_id]
+      @secret_key = opts[:secret_key]
+      api_host = opts[:api_host]
+      ssl = opts[:ssl] || nil
+      proxy_host = opts[:proxy_host] || nil
 
       http_root = ssl ? 'https' : 'http'
       proxy = proxy_host ? "#{http_root}://#{proxy_host}" : nil

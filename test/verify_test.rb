@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 require 'pry'
-require 'telesign'
+require 'telesignature'
 require 'webmock/minitest'
 
 class VerifyTest < Minitest::Test
@@ -41,7 +41,7 @@ class VerifyTest < Minitest::Test
             headers: @acceptance_headers).
         to_return(body: @expected_data, status: 200)
 
-    p = Telesign::Verify.new customer_id: @expected_cid, secret_key: @expected_secret_key
+    p = Telesignature::Verify.new customer_id: @expected_cid, secret_key: @expected_secret_key
     p.sms phone_number: @expected_phone_no,
           verify_code: @expected_verify_code,
           language: @expected_language
@@ -57,7 +57,7 @@ class VerifyTest < Minitest::Test
             headers: @acceptance_headers).
         to_return(body: @expected_data, status: 200)
 
-    p = Telesign::Verify.new customer_id: @expected_cid, secret_key: @expected_secret_key
+    p = Telesignature::Verify.new customer_id: @expected_cid, secret_key: @expected_secret_key
     p.call phone_number: @expected_phone_no,
            verify_code: @expected_verify_code,
            language: @expected_language
@@ -74,7 +74,7 @@ class VerifyTest < Minitest::Test
             headers: @acceptance_headers).
         to_return(body: @expected_data, status: 200)
 
-    p = Telesign::Verify.new customer_id: @expected_cid, secret_key: @expected_secret_key
+    p = Telesignature::Verify.new customer_id: @expected_cid, secret_key: @expected_secret_key
     p.sms phone_number: @expected_phone_no,
           language: @expected_language
   end
@@ -89,7 +89,7 @@ class VerifyTest < Minitest::Test
             headers: @acceptance_headers).
         to_return(body: @expected_data, status: 200)
 
-    p = Telesign::Verify.new customer_id: @expected_cid, secret_key: @expected_secret_key
+    p = Telesignature::Verify.new customer_id: @expected_cid, secret_key: @expected_secret_key
     p.call phone_number: @expected_phone_no,
            language: @expected_language
   end
@@ -100,7 +100,7 @@ class VerifyTest < Minitest::Test
       with( headers: @acceptance_headers).
         to_return(body: @expected_data, status: 200)
 
-    p = Telesign::Verify.new customer_id: @expected_cid, secret_key: @expected_secret_key
+    p = Telesignature::Verify.new customer_id: @expected_cid, secret_key: @expected_secret_key
     p.status @expected_ref_id
   end
 
@@ -111,7 +111,7 @@ class VerifyTest < Minitest::Test
             headers: @acceptance_headers).
         to_return(body: @expected_data, status: 200)
 
-    p = Telesign::Verify.new customer_id: @expected_cid, secret_key: @expected_secret_key
+    p = Telesignature::Verify.new customer_id: @expected_cid, secret_key: @expected_secret_key
     p.status @expected_ref_id, @expected_verify_code
   end
 

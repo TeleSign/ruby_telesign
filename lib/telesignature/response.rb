@@ -1,4 +1,4 @@
-module Telesign
+module Telesignature
   class Response
     attr_accessor :data, :headers, :status, :raw_data, :verify_code
 

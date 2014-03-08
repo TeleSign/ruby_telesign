@@ -18,7 +18,7 @@ AUTH_METHOD = {
     sha256: {hash: OpenSSL::Digest::SHA256, name: 'HMAC-SHA256'}
 }
 
-module Telesign
+module Telesignature
   class Auth
     def self.generate_auth_headers(opts = {})
       content_type = opts[:content_type] ? opts[:content_type] : ''

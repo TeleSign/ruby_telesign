@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 require 'pry'
-require 'telesign'
+require 'telesignature'
 
 begin
   require 'turn/autorun'

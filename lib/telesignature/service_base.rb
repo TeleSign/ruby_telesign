@@ -1,7 +1,7 @@
 require 'faraday'
 require 'json'
 
-module Telesign
+module Telesignature
   class ServiceBase
     # attr_accessor :customer_id, :secret_key, :api_host
 

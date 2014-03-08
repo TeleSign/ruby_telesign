@@ -1,4 +1,4 @@
-module Telesign
+module Telesignature
   module Helpers
     def random_with_N_digits n
       range_start = 10 ** (n - 1)

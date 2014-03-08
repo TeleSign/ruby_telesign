@@ -1,4 +1,4 @@
-module Telesign
+module Telesignature
   class PhoneId < ServiceBase
     include Helpers
     # """
@@ -75,7 +75,7 @@ module Telesign
       resource = "/v1/phoneid/standard/%s" % phone_number
       method = 'GET'
 
-      headers = Telesign::Auth.generate_auth_headers(
+      headers = Telesignature::Auth.generate_auth_headers(
           customer_id: @customer_id,
           secret_key: @secret_key,
           resource: resource,
@@ -87,7 +87,7 @@ module Telesign
           # proxies=@proxy
       end
 
-      return Telesign::Response.new validate_response(response), response
+      return Telesignature::Response.new validate_response(response), response
     end
 
     def score phone_number, use_case_code
@@ -149,7 +149,7 @@ module Telesign
       resource = "/v1/phoneid/score/%s" % phone_number
       method = 'GET'
 
-      headers = Telesign::Auth.generate_auth_headers(
+      headers = Telesignature::Auth.generate_auth_headers(
           customer_id: @customer_id,
           secret_key: @secret_key,
           resource: resource,
@@ -162,7 +162,7 @@ module Telesign
           # proxies=@proxy
       end
 
-      return Telesign::Response.new validate_response(response), response
+      return Telesignature::Response.new validate_response(response), response
     end
 
     def contact phone_number, use_case_code
@@ -227,7 +227,7 @@ module Telesign
       resource = "/v1/phoneid/contact/%s" % phone_number
       method = 'GET'
 
-      headers = Telesign::Auth.generate_auth_headers(
+      headers = Telesignature::Auth.generate_auth_headers(
           customer_id: @customer_id,
           secret_key: @secret_key,
           resource: resource,
@@ -240,7 +240,7 @@ module Telesign
           # proxies=@proxy
       end
 
-      return Telesign::Response.new validate_response(response), response
+      return Telesignature::Response.new validate_response(response), response
     end
 
     def live phone_number, use_case_code
@@ -305,7 +305,7 @@ module Telesign
       resource = "/v1/phoneid/live/%s" % phone_number
       method = 'GET'
 
-      headers = Telesign::Auth.generate_auth_headers(
+      headers = Telesignature::Auth.generate_auth_headers(
           customer_id: @customer_id,
           secret_key: @secret_key,
           resource: resource,
@@ -318,7 +318,7 @@ module Telesign
           # proxies=@proxy
       end
 
-      return Telesign::Response.new validate_response(response), response
+      return Telesignature::Response.new validate_response(response), response
     end
   end
 end

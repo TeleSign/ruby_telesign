@@ -1,4 +1,4 @@
-module Telesign
+module Telesignature
   class Verify < ServiceBase
     include Helpers
     # """
@@ -108,7 +108,7 @@ module Telesign
           verify_code: verify_code,
           template: template}
 
-      headers = Telesign::Auth.generate_auth_headers(
+      headers = Telesignature::Auth.generate_auth_headers(
           customer_id: @customer_id,
           secret_key: @secret_key,
           resource: resource,
@@ -122,7 +122,7 @@ module Telesign
           # proxies=@proxy
       end
 
-      return Telesign::Response.new validate_response(response), response, verify_code
+      return Telesignature::Response.new validate_response(response), response, verify_code
     end
 
     def call opts = {}
@@ -190,7 +190,7 @@ module Telesign
           language: language,
           verify_code: verify_code}
 
-      headers = Telesign::Auth.generate_auth_headers(
+      headers = Telesignature::Auth.generate_auth_headers(
           customer_id: @customer_id,
           secret_key: @secret_key,
           resource: resource,
@@ -204,7 +204,7 @@ module Telesign
           # proxies=@proxy
       end
 
-      return Telesign::Response.new validate_response(response), response, verify_code
+      return Telesignature::Response.new validate_response(response), response, verify_code
     end
 
     def status ref_id, verify_code=nil
@@ -249,7 +249,7 @@ module Telesign
       resource = "/v1/verify/%s" % ref_id
       method = 'GET'
 
-      headers = Telesign::Auth.generate_auth_headers(
+      headers = Telesignature::Auth.generate_auth_headers(
           customer_id: @customer_id,
           secret_key: @secret_key,
           resource: resource,
@@ -267,7 +267,7 @@ module Telesign
           # proxies=@proxy
       end
 
-      return Telesign::Response.new validate_response(response), response
+      return Telesignature::Response.new validate_response(response), response
     end
   end
 end

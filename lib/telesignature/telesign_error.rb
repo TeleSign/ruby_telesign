@@ -1,4 +1,4 @@
-module Telesign
+module Telesignature
   class TelesignError < ::StandardError
     # """
     # The **exceptions** base class.

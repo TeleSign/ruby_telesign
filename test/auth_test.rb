@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 require 'pry'
-require 'telesign'
+require 'telesignature'
 
 class TestAuth < Minitest::Test
   def setup
@@ -10,7 +10,7 @@ class TestAuth < Minitest::Test
   end
 
   def test_headers_are_set_on_get
-    Telesign::Auth.generate_auth_headers(
+    Telesignature::Auth.generate_auth_headers(
             customer_id: @expected_cid,
             secret_key: @expected_secret_key,
             resource: @expected_resource,
@@ -21,7 +21,7 @@ class TestAuth < Minitest::Test
     expected_nonce = '1234'
 
     headers = SecureRandom.stub :uuid, expected_nonce do
-      Telesign::Auth.generate_auth_headers(
+      Telesignature::Auth.generate_auth_headers(
         customer_id: @expected_cid,
         secret_key: @expected_secret_key,
         resource: @expected_resource,
@@ -32,7 +32,7 @@ class TestAuth < Minitest::Test
   end
 
   def test_date_is_set
-    headers = Telesign::Auth.generate_auth_headers(
+    headers = Telesignature::Auth.generate_auth_headers(
                 customer_id: @expected_cid,
                 secret_key: @expected_secret_key,
                 resource: @expected_resource,
@@ -45,7 +45,7 @@ class TestAuth < Minitest::Test
   def test_sha1_default_auth_method
     expected_auth_method = 'HMAC-SHA1'
 
-    headers = Telesign::Auth.generate_auth_headers(
+    headers = Telesignature::Auth.generate_auth_headers(
                 customer_id: @expected_cid,
                 secret_key: @expected_secret_key,
                 resource: @expected_resource,
@@ -57,7 +57,7 @@ class TestAuth < Minitest::Test
   def test_sha256_auth_method
     expected_auth_method = 'HMAC-SHA256'
 
-    headers = Telesign::Auth.generate_auth_headers(
+    headers = Telesignature::Auth.generate_auth_headers(
                 customer_id: @expected_cid,
                 secret_key: @expected_secret_key,
                 resource: @expected_resource,
@@ -70,7 +70,7 @@ class TestAuth < Minitest::Test
   def test_customer_id_in_auth
     expected_auth_start = "TSA %s:" % @expected_cid
 
-    headers = Telesign::Auth.generate_auth_headers(
+    headers = Telesignature::Auth.generate_auth_headers(
                 customer_id: @expected_cid,
                 secret_key: @expected_secret_key,
                 resource: @expected_resource,

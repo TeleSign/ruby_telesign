@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'telesign/version'
+require 'telesignature/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'telesign'
-  spec.version       = Telesign::VERSION
+  spec.name          = 'telesignature'
+  spec.version       = Telesignature::VERSION
   spec.authors       = ['Andy Koch']
   spec.email         = ['akoch@practicefusion.com']
   spec.description   = %q{Client gem for Telesign REST API}

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    telesign (0.0.1)
+    telesignature (0.0.1)
       faraday
 
 GEM
@@ -20,8 +20,8 @@ GEM
       debugger-ruby_core_source (~> 1.2.3)
     debugger-linecache (1.2.0)
     debugger-ruby_core_source (1.2.3)
-    faraday (0.8.8)
-      multipart-post (~> 1.2.0)
+    faraday (0.9.0)
+      multipart-post (>= 1.2, < 3)
     ffi (1.9.3)
     formatador (0.2.4)
     guard (2.2.3)
@@ -40,7 +40,7 @@ GEM
     lumberjack (1.0.4)
     method_source (0.8.2)
     minitest (5.2.3)
-    multipart-post (1.2.0)
+    multipart-post (2.0.0)
     pry (0.9.12.2)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
@@ -71,5 +71,5 @@ DEPENDENCIES
   pry
   pry-debugger
   rake
-  telesign!
+  telesignature!
   webmock

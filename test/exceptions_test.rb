@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 require 'pry'
-require 'telesign'
+require 'telesignature'
 
 class ExceptionTestTest < Minitest::Test
   # Test for exceptions in telesign sdk
@@ -33,24 +33,24 @@ class ExceptionTestTest < Minitest::Test
 
   def test_properties_are_populated_in_TelesignError
     begin
-      raise Telesign::TelesignError.new( @expected_errors, @expected_http_response )
-    rescue Telesign::TelesignError => x
+      raise Telesignature::TelesignError.new( @expected_errors, @expected_http_response )
+    rescue Telesignature::TelesignError => x
       validate_exception_properties x
     end
   end
 
   def test_properties_are_populated_in_AuthorizationError
     begin
-      raise Telesign::AuthorizationError.new @expected_errors, @expected_http_response
-    rescue Telesign::AuthorizationError => x
+      raise Telesignature::AuthorizationError.new @expected_errors, @expected_http_response
+    rescue Telesignature::AuthorizationError => x
       validate_exception_properties x
     end
   end
 
   def test_properties_are_populated_in_ValidationError
     begin
-      raise Telesign::ValidationError.new @expected_errors, @expected_http_response
-    rescue Telesign::ValidationError => x
+      raise Telesignature::ValidationError.new @expected_errors, @expected_http_response
+    rescue Telesignature::ValidationError => x
       validate_exception_properties(x)
     end
   end

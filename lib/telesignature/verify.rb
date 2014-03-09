@@ -117,7 +117,7 @@ module Telesignature
 
       response = @conn.post do |req|
           req.url resource
-          req.body = fields
+          req.body = URI.encode_www_form(fields)
           req.headers = headers
           # proxies=@proxy
       end
@@ -199,7 +199,7 @@ module Telesignature
 
       response = @conn.post do |req|
           req.url resource
-          req.body = fields
+          req.body = URI.encode_www_form(fields)
           req.headers = headers
           # proxies=@proxy
       end

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    telesignature (0.0.3)
+    telesignature (0.0.4)
       faraday
 
 GEM

@@ -34,7 +34,7 @@ module Telesignature
       super(
           customer_id: opts[:customer_id],
           secret_key: opts[:secret_key],
-          ssl: (opts[:ssl] || true),
+          ssl: ((opts[:ssl].nil?) ? true : opts[:ssl]),
           api_host: (opts[:api_host] || 'rest.telesign.com'),
           proxy_host: (opts[:proxy_host] || nil)
         )

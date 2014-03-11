@@ -2,11 +2,20 @@ module Telesignature
   module MockService
     class Railtie < ::Rails::Railtie
       initializer 'telesignature_railtie.configure_rails_initialization' do
+
         if ENV['TELESIGN_STUBBED']
-          Process.detach(Process.fork do
-            require 'telesignature/mock_service/fake_server'
-          end)
+          port = (ENV['TELESIGN_PORT'].to_i || 11989)
+          if `lsof -i :#{port}`.blank? # no process running on 11988
+            Process.detach(pid = Process.fork do
+              require 'telesignature/mock_service/fake_server'
+            end)
+          else
+            Rails.logger.warn "TELESIGN STUB MODE FAILED TO START\nProcess already listening on #{port}"
+          end
         end
+
+        at_exit { pid && `kill #{pid}` }
+
       end
     end
   end

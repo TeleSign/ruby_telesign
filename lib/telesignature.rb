@@ -1,4 +1,5 @@
 require 'telesignature/version'
+require 'telesignature/mock_service/railtie' if defined? Rails
 
 module Telesignature
   autoload :TelesignError, 'telesignature/telesign_error'

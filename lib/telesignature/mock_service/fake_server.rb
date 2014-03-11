@@ -47,7 +47,7 @@ class StdHelpers
   end
 end
 
-Mimic.mimic port: 11989, host: 'localhost', fork: false do
+Mimic.mimic port: (ENV['TELESIGN_PORT'].to_i || 11989), host: (ENV['TELESIGN_URL'] || 'localhost'), fork: false do
   # 'https://rest.telesign.com/v1/verify/sms'
   # params['phone_number']
   # params['language']

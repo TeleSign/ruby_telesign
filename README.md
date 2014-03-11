@@ -46,9 +46,6 @@ Enable it by setting ENV['TELESIGN_STUBBED'] to something truthy.
 
 The Sinatra app will run on "http://localhost:11989".
 
-The stubs app will shutdown with a rails server, but a console still needs a manual shutdown.
-A known issue, hoping to get that sorted out sometime soonish...
-
 Currently stubs mode supports:
 
 post '/v1/verify/sms'

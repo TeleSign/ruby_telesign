@@ -20,15 +20,14 @@ module Telesignature
 
     def initialize errors, http_response
       @errors = errors
-      @headers = http_response[:headers]
-      @status = http_response[:status_code]
-      @data = http_response[:text]
-      @raw_data = http_response[:text]
+      @headers = http_response.headers
+      @status = http_response.status
+      @data = http_response.body
       super()
     end
 
     def to_s
-      @errors.inject(''){|ret, x| ret += "%s\n" % x[:description] }
+      @errors.first['description']
     end
   end
 end

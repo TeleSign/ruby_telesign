@@ -3,10 +3,6 @@ module Telesignature
     # """
     # Either the client failed to authenticate with the REST API server, or the service cannot be executed using the specified credentials.
 
-    # .. list-table::
-    #    :widths: 5 30
-    #    :header-rows: 1
-
     #    * - Attributes
     #      -
     #    * - `data`

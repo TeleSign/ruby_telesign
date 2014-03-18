@@ -3,10 +3,6 @@ module Telesignature
     # """
     # The submitted data failed the intial validation, and the service was not executed.
 
-    # .. list-table::
-    #    :widths: 5 30
-    #    :header-rows: 1
-
     #    * - Attributes
     #      -
     #    * - `data`

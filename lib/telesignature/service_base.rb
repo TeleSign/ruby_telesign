@@ -27,9 +27,9 @@ module Telesignature
       resp_obj = JSON.load response.body
       if response.status != 200
         if response.status == 401
-          raise AuthorizationError.new resp_obj, response
+          raise AuthorizationError.new resp_obj['errors'], response
         else
-          raise TelesignError.new resp_obj, response
+          raise TelesignError.new resp_obj['errors'], response
         end
       end
 

@@ -27,7 +27,7 @@ module Telesignature
     end
 
     def to_s
-      @errors.first['description']
+      @errors.inject(''){|ret, x| ret += "#{x['description']}\n" }
     end
   end
 end

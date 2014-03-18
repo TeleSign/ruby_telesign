@@ -4,10 +4,6 @@ module Telesignature
     # """
     # The **PhoneId** class exposes three services that each provide detailed information about a specified phone number.
 
-    # .. list-table::
-    #    :widths: 5 30
-    #    :header-rows: 1
-
     #    * - Attributes
     #      -
     #    * - `customer_id`
@@ -37,21 +33,19 @@ module Telesignature
 
     def standard phone_number
       # """
-      # Retrieves the standard set of details about the specified phone number. This includes the type of phone (e.g., land line or mobile), and it's approximate geographic location.
-
-      # .. list-table::
-      #    :widths: 5 30
-      #    :header-rows: 1
+      # Retrieves the standard set of details about the specified phone number.
+      # This includes the type of phone (e.g., land line or mobile),
+      # and it's approximate geographic location.
 
       #    * - Parameters
       #      -
       #    * - `phone_number`
-      #      - The phone number you want details about. You must specify the phone number in its entirety. That is, it must begin with the country code, followed by the area code, and then by the local number. For example, you would specify the phone number (310) 555-1212 as 13105551212.
+      #      - The phone number you want details about. You must specify the phone number
+      #        in its entirety. That is, it must begin with the country code, followed by
+      #        the area code, and then by the local number.
+      #        For example, you would specify the phone number (310) 555-1212 as 13105551212.
 
       # **Example**::
-
-      #     from telesign.api import PhoneId
-      #     from telesign.exceptions import AuthorizationError, TelesignError
 
       #     cust_id = "FFFFFFFF-EEEE-DDDD-1234-AB1234567890"
       #     secret_key = "EXAMPLE----TE8sTgg45yusumoN6BYsBVkh+yRJ5czgsnCehZaOYldPJdmFh6NeX8kunZ2zU1YWaUw/0wV6xfw=="
@@ -92,44 +86,25 @@ module Telesignature
 
     def score phone_number, use_case_code
       # """
-      # Retrieves a score for the specified phone number. This ranks the phone number's "risk level" on a scale from 0 to 1000, so you can code your web application to handle particular use cases (e.g., to stop things like chargebacks, identity theft, fraud, and spam).
-
-      # .. list-table::
-      #    :widths: 5 30
-      #    :header-rows: 1
+      # Retrieves a score for the specified phone number.
+      # This ranks the phone number's "risk level" on a scale from 0 to 1000,
+      # so you can code your web application to handle particular use cases
+      # (e.g., to stop things like chargebacks, identity theft, fraud, and spam).
 
       #    * - Parameters
       #      -
       #    * - `phone_number`
-      #      - The phone number you want details about. You must specify the phone number in its entirety. That is, it must begin with the country code, followed by the area code, and then by the local number. For example, you would specify the phone number (310) 555-1212 as 13105551212.
+      #      - The phone number you want details about. You must specify the phone number in its entirety.
+      #        That is, it must begin with the country code, followed by the area code, and then by the local number.
+      #        For example, you would specify the phone number (310) 555-1212 as 13105551212.
       #    * - `use_case_code`
       #      - A four letter code used to specify a particular usage scenario for the web service.
 
-      # .. rubric:: Use-case Codes
-
       # The following table list the available use-case codes, and includes a description of each.
 
-      # ========  =====================================
-      # Code      Description
-      # ========  =====================================
-      # **BACS**  Prevent bulk account creation + spam.
-      # **BACF**  Prevent bulk account creation + fraud.
-      # **CHBK**  Prevent chargebacks.
-      # **ATCK**  Prevent account takeover/compromise.
-      # **LEAD**  Prevent false lead entry.
-      # **RESV**  Prevent fake/missed reservations.
-      # **PWRT**  Password reset.
-      # **THEF**  Prevent identity theft.
-      # **TELF**  Prevent telecom fraud.
-      # **RXPF**  Prevent prescription fraud.
-      # **OTHR**  Other.
-      # **UNKN**  Unknown/prefer not to say.
-      # ========  =====================================
+      # http://docs.telesign.com/rest/content/xt/xt-use-case-codes.html#xref-use-case-codes
 
       # **Example**::
-
-      #     from telesign.api import PhoneId
-      #     from telesign.exceptions import AuthorizationError, TelesignError
 
       #     cust_id = "FFFFFFFF-EEEE-DDDD-1234-AB1234567890"
       #     secret_key = "EXAMPLE----TE8sTgg45yusumoN6BYsBVkh+yRJ5czgsnCehZaOYldPJdmFh6NeX8kunZ2zU1YWaUw/0wV6xfw=="
@@ -167,11 +142,8 @@ module Telesignature
 
     def contact phone_number, use_case_code
       # """
-      # In addition to the information retrieved by **standard**, this service provides the Name & Address associated with the specified phone number.
-
-      # .. list-table::
-      #    :widths: 5 30
-      #    :header-rows: 1
+      # In addition to the information retrieved by **standard**,
+      # this service provides the Name & Address associated with the specified phone number.
 
       #    * - Parameters
       #      -
@@ -180,31 +152,9 @@ module Telesignature
       #    * - `use_case_code`
       #      - A four letter code used to specify a particular usage scenario for the web service.
 
-      # .. rubric:: Use-case Codes
-
-      # The following table list the available use-case codes, and includes a description of each.
-
-      # ========  =====================================
-      # Code      Description
-      # ========  =====================================
-      # **BACS**  Prevent bulk account creation + spam.
-      # **BACF**  Prevent bulk account creation + fraud.
-      # **CHBK**  Prevent chargebacks.
-      # **ATCK**  Prevent account takeover/compromise.
-      # **LEAD**  Prevent false lead entry.
-      # **RESV**  Prevent fake/missed reservations.
-      # **PWRT**  Password reset.
-      # **THEF**  Prevent identity theft.
-      # **TELF**  Prevent telecom fraud.
-      # **RXPF**  Prevent prescription fraud.
-      # **OTHR**  Other.
-      # **UNKN**  Unknown/prefer not to say.
-      # ========  =====================================
+      # http://docs.telesign.com/rest/content/xt/xt-use-case-codes.html#xref-use-case-codes
 
       # **Example**::
-
-      #     from telesign.api import PhoneId
-      #     from telesign.exceptions import AuthorizationError, TelesignError
 
       #     cust_id = "FFFFFFFF-EEEE-DDDD-1234-AB1234567890"
       #     secret_key = "EXAMPLE----TE8sTgg45yusumoN6BYsBVkh+yRJ5czgsnCehZaOYldPJdmFh6NeX8kunZ2zU1YWaUw/0wV6xfw=="
@@ -245,44 +195,24 @@ module Telesignature
 
     def live phone_number, use_case_code
       # """
-      # In addition to the information retrieved by **standard**, this service provides actionable data associated with the specified phone number.
-
-      # .. list-table::
-      #    :widths: 5 30
-      #    :header-rows: 1
+      # In addition to the information retrieved by **standard**,
+      # this service provides actionable data associated with the specified phone number.
 
       #    * - Parameters
       #      -
       #    * - `phone_number`
-      #      - The phone number you want details about. You must specify the phone number in its entirety. That is, it must begin with the country code, followed by the area code, and then by the local number. For example, you would specify the phone number (310) 555-1212 as 13105551212.
+      #      - The phone number you want details about. You must specify the phone number in its entirety.
+      #        That is, it must begin with the country code, followed by the area code,
+      #        and then by the local number.
+      #        For example, you would specify the phone number (310) 555-1212 as 13105551212.
       #    * - `use_case_code`
       #      - A four letter code used to specify a particular usage scenario for the web service.
 
-      # .. rubric:: Use-case Codes
-
       # The following table list the available use-case codes, and includes a description of each.
 
-      # ========  =====================================
-      # Code      Description
-      # ========  =====================================
-      # **BACS**  Prevent bulk account creation + spam.
-      # **BACF**  Prevent bulk account creation + fraud.
-      # **CHBK**  Prevent chargebacks.
-      # **ATCK**  Prevent account takeover/compromise.
-      # **LEAD**  Prevent false lead entry.
-      # **RESV**  Prevent fake/missed reservations.
-      # **PWRT**  Password reset.
-      # **THEF**  Prevent identity theft.
-      # **TELF**  Prevent telecom fraud.
-      # **RXPF**  Prevent prescription fraud.
-      # **OTHR**  Other.
-      # **UNKN**  Unknown/prefer not to say.
-      # ========  =====================================
+      # http://docs.telesign.com/rest/content/xt/xt-use-case-codes.html#xref-use-case-codes
 
       # **Example**::
-
-      #     from telesign.api import PhoneId
-      #     from telesign.exceptions import AuthorizationError, TelesignError
 
       #     cust_id = "FFFFFFFF-EEEE-DDDD-1234-AB1234567890"
       #     secret_key = "EXAMPLE----TE8sTgg45yusumoN6BYsBVkh+yRJ5czgsnCehZaOYldPJdmFh6NeX8kunZ2zU1YWaUw/0wV6xfw=="

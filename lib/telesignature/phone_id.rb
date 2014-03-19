@@ -1,38 +1,16 @@
 module Telesignature
-  class PhoneId < ServiceBase
+  class PhoneId
     include Helpers
-    # """
-    # The **PhoneId** class exposes three services that each provide detailed information about a specified phone number.
 
-    #    * - Attributes
-    #      -
-    #    * - `customer_id`
-    #      - A string value that identifies your TeleSign account.
-    #    * - `secret_key`
-    #      - A base64-encoded string value that validates your access to the TeleSign web services.
-    #    * - `ssl`
-    #      - Specifies whether to use a secure connection with the TeleSign server. Defaults to *true*.
-    #    * - `api_host`
-    #      - The Internet host used in the base URI for REST web services. The default is *rest.telesign.com* (and the base URI is https://rest.telesign.com/).
-    #    * - `proxy_host`
-    #      - The host and port when going through a proxy server. ex: "localhost:8080. The default to no proxy.
-
-    # .. note::
-    #    You can obtain both your Customer ID and Secret Key from the `TeleSign Customer Portal <https://portal.telesign.com/account_profile_api_auth.php>`_.
-    # """
+    attr_accessor :conn, :customer_id, :secret_key
 
     def initialize opts = {}
-      super(
-          customer_id: opts[:customer_id],
-          secret_key: opts[:secret_key],
-          ssl: ((opts[:ssl].nil?) ? true : opts[:ssl]),
-          api_host: (opts[:api_host] || 'rest.telesign.com'),
-          proxy_host: (opts[:proxy_host] || nil)
-        )
+      @conn = opts[:conn]
+      @customer_id = opts[:customer_id]
+      @secret_key = opts[:secret_key]
     end
 
     def standard phone_number
-      # """
       # Retrieves the standard set of details about the specified phone number.
       # This includes the type of phone (e.g., land line or mobile),
       # and it's approximate geographic location.
@@ -65,7 +43,6 @@ module Telesignature
       #         # for details. Data returned might be incomplete or invalid.
       #         ...
 
-      # """
       resource = "/v1/phoneid/standard/%s" % phone_number
       method = 'GET'
 
@@ -85,7 +62,6 @@ module Telesignature
     end
 
     def score phone_number, use_case_code
-      # """
       # Retrieves a score for the specified phone number.
       # This ranks the phone number's "risk level" on a scale from 0 to 1000,
       # so you can code your web application to handle particular use cases
@@ -120,7 +96,6 @@ module Telesignature
       #     except TelesignError as ex:
       #         ...
 
-      # """
       resource = "/v1/phoneid/score/%s" % phone_number
       method = 'GET'
 
@@ -141,7 +116,6 @@ module Telesignature
     end
 
     def contact phone_number, use_case_code
-      # """
       # In addition to the information retrieved by **standard**,
       # this service provides the Name & Address associated with the specified phone number.
 
@@ -173,7 +147,6 @@ module Telesignature
       #         #    for details; data returned may be incomplete or not be valid
       #         ...
 
-      # """
       resource = "/v1/phoneid/contact/%s" % phone_number
       method = 'GET'
 
@@ -194,7 +167,6 @@ module Telesignature
     end
 
     def live phone_number, use_case_code
-      # """
       # In addition to the information retrieved by **standard**,
       # this service provides actionable data associated with the specified phone number.
 
@@ -231,7 +203,6 @@ module Telesignature
       #         #    for details; data returned may be incomplete or not be valid
       #         ...
 
-      # """
       resource = "/v1/phoneid/live/%s" % phone_number
       method = 'GET'
 

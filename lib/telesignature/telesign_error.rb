@@ -1,11 +1,6 @@
 module Telesignature
   class TelesignError < ::StandardError
-    # """
     # The **exceptions** base class.
-
-    # .. list-table::
-    #    :widths: 5 30
-    #    :header-rows: 1
 
     #    * - Attributes
     #      -
@@ -14,12 +9,10 @@ module Telesignature
     #    * - `http_response`
     #      - The full HTTP Response object, including the HTTP status code, headers, and raw returned data.
 
-    # """
+    attr_accessor :errors, :headers, :status, :data
 
-    attr_accessor :errors, :headers, :status, :data, :raw_data
-
-    def initialize errors, http_response
-      @errors = errors
+    def initialize response_json, http_response
+      @errors = response_json['errors']
       @headers = http_response.headers
       @status = http_response.status
       @data = http_response.body

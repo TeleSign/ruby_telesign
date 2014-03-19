@@ -1,44 +1,23 @@
 module Telesignature
-  class Verify < ServiceBase
+  class Verify
     include Helpers
-    # """
-    # The **Verify** class exposes two services for sending users a verification token (a three to five-digit number). You can use this mechanism to simply test whether you can reach users at the phone number they supplied, or you can have them use the token to authenticate themselves with your web application.
 
-    # This class also exposes a service that is used in conjunction with the first two services, in that it allows you to confirm the result of the authentication.
-
-    # You can use this verification factor in combination with username & password to provide two-factor authentication for higher security.
-
-    # .. list-table::
-    #    :widths: 5 30
-    #    :header-rows: 1
-
-    #    * - Attributes
-    #      -
-    #    * - `customer_id`
-    #      - A string value that identifies your TeleSign account.
-    #    * - `secret_key`
-    #      - A base64-encoded string value that validates your access to the TeleSign web services.
-    #    * - `ssl`
-    #      - Specifies whether to use a secure connection with the TeleSign server. Defaults to *true*.
-    #    * - `api_host`
-    #      - The Internet host used in the base URI for REST web services. The default is *rest.telesign.com* (and the base URI is https://rest.telesign.com/).
-    #    * - `proxy_host`
-    #      - The host and port when going through a proxy server. ex: "localhost:8080. The default to no proxy.
-
-    # .. note::
-    #    You can obtain both your Customer ID and Secret Key from the `TeleSign Customer Portal <https://portal.telesign.com/account_profile_api_auth.php>`_.
-
-    # """
+    attr_accessor :conn, :customer_id, :secret_key
 
     def initialize opts = {}
-      super(
-          customer_id: opts[:customer_id],
-          secret_key: opts[:secret_key],
-          ssl: ((opts[:ssl].nil?) ? true : opts[:ssl]),
-          api_host: (opts[:api_host] || 'rest.telesign.com'),
-          proxy_host: (opts[:proxy_host] || nil)
-        )
+      @conn = opts[:conn]
+      @customer_id = opts[:customer_id]
+      @secret_key = opts[:secret_key]
     end
+
+    # The **Verify** class exposes two services for sending users a verification token (a three to five-digit number).
+    # You can use this mechanism to simply test whether you can reach users at the phone number they supplied,
+    # or you can have them use the token to authenticate themselves with your web application.
+
+    # This class also exposes a service that is used in conjunction with the first two services,
+    # in that it allows you to confirm the result of the authentication.
+
+    # You can use this verification factor in combination with username & password to provide two-factor authentication for higher security.
 
     def sms opts = {}
       phone_number = opts[:phone_number]
@@ -46,12 +25,7 @@ module Telesignature
       language = opts[:language] || 'en-US'
       template = opts[:template] || ''
 
-      # """
       # Sends a text message containing the verification code, to the specified phone number (supported for mobile phones only).
-
-      # .. list-table::
-      #    :widths: 5 30
-      #    :header-rows: 1
 
       #    * - Parameters
       #      -
@@ -93,8 +67,6 @@ module Telesignature
       #         except TelesignError as ex:
       #             ...
 
-      # """
-
       if verify_code.nil?
         verify_code = random_with_N_digits(5)
       end
@@ -130,12 +102,7 @@ module Telesignature
       verify_code = opts[:verify_code]
       language = opts[:language] || 'en-US'
 
-      # """
       # Calls the specified phone number, and using speech synthesis, speaks the verification code to the user.
-
-      # .. list-table::
-      #    :widths: 5 30
-      #    :header-rows: 1
 
       #    * - Parameters
       #      -
@@ -176,8 +143,6 @@ module Telesignature
       #         except TelesignError as ex:
       #             ...
 
-      # """
-
       if verify_code.nil?
         verify_code = random_with_N_digits(5)
       end
@@ -208,12 +173,7 @@ module Telesignature
     end
 
     def status ref_id, verify_code=nil
-      # """
       # Retrieves the verification result. You make this call in your web application after users complete the authentication transaction (using either a call or sms).
-
-      # .. list-table::
-      #    :widths: 5 30
-      #    :header-rows: 1
 
       #    * - Parameters
       #      -
@@ -243,8 +203,6 @@ module Telesignature
       #             ...
       #         except TelesignError as ex:
       #             ...
-
-      # """
 
       resource = "/v1/verify/%s" % ref_id
       method = 'GET'

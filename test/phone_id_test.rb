@@ -30,8 +30,8 @@ class PhoneIdTest < Minitest::Test
       with( headers: @acceptance_headers).
         to_return(body: @expected_data, status: 200)
 
-    tele = Telesignature::PhoneId.new customer_id: @expected_cid, secret_key: @expected_secret_key
-    tele.standard @expected_phone_no
+    tele = Telesignature::Api.new customer_id: @expected_cid, secret_key: @expected_secret_key
+    tele.phone_id.standard @expected_phone_no
   end
 
   def test_standard_phoneid_unauthorized
@@ -41,10 +41,10 @@ class PhoneIdTest < Minitest::Test
       with( headers: @acceptance_headers).
         to_return(body: response_body, status: [401, 'Unauthorized'])
 
-    tele = Telesignature::PhoneId.new customer_id: @expected_cid, secret_key: @expected_secret_key
+    tele = Telesignature::Api.new customer_id: @expected_cid, secret_key: @expected_secret_key
 
     assert_raises(Telesignature::AuthorizationError){
-      tele.standard(@expected_phone_no)
+      tele.phone_id.standard(@expected_phone_no)
     }
   end
 
@@ -55,10 +55,10 @@ class PhoneIdTest < Minitest::Test
       with( headers: @acceptance_headers).
         to_return(body: response_body, status: [502, 'Bad Gateway'])
 
-    tele = Telesignature::PhoneId.new customer_id: @expected_cid, secret_key: @expected_secret_key
+    tele = Telesignature::Api.new customer_id: @expected_cid, secret_key: @expected_secret_key
 
     assert_raises(Telesignature::TelesignError){
-      tele.standard(@expected_phone_no)
+      tele.phone_id.standard(@expected_phone_no)
     }
   end
 
@@ -67,8 +67,8 @@ class PhoneIdTest < Minitest::Test
       with(query: {ucid: 'OTHR'}, headers: @acceptance_headers).
         to_return(body: @expected_data, status: 200)
 
-    tele = Telesignature::PhoneId.new customer_id: @expected_cid, secret_key: @expected_secret_key
-    tele.score @expected_phone_no, 'OTHR'
+    tele = Telesignature::Api.new customer_id: @expected_cid, secret_key: @expected_secret_key
+    tele.phone_id.score @expected_phone_no, 'OTHR'
   end
 
   def test_contact_phoneid
@@ -76,8 +76,8 @@ class PhoneIdTest < Minitest::Test
       with(query: {ucid: 'OTHR'}, headers: @acceptance_headers).
         to_return(body: @expected_data, status: 200)
 
-    tele = Telesignature::PhoneId.new customer_id: @expected_cid, secret_key: @expected_secret_key
-    tele.contact @expected_phone_no, 'OTHR'
+    tele = Telesignature::Api.new customer_id: @expected_cid, secret_key: @expected_secret_key
+    tele.phone_id.contact @expected_phone_no, 'OTHR'
   end
 
   def test_live_phoneid
@@ -85,8 +85,8 @@ class PhoneIdTest < Minitest::Test
       with(query: {ucid: 'OTHR'}, headers: @acceptance_headers).
         to_return(body: @expected_data, status: 200)
 
-    tele = Telesignature::PhoneId.new customer_id: @expected_cid, secret_key: @expected_secret_key
-    tele.live @expected_phone_no, 'OTHR'
+    tele = Telesignature::Api.new customer_id: @expected_cid, secret_key: @expected_secret_key
+    tele.phone_id.live @expected_phone_no, 'OTHR'
   end
 
   # # @mock.patch.object(requests, "get")

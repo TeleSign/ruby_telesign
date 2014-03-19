@@ -41,8 +41,8 @@ class VerifyTest < Minitest::Test
             headers: @acceptance_headers).
         to_return(body: @expected_data, status: 200)
 
-    tele = Telesignature::Verify.new customer_id: @expected_cid, secret_key: @expected_secret_key
-    tele.sms phone_number: @expected_phone_no,
+    tele = Telesignature::Api.new customer_id: @expected_cid, secret_key: @expected_secret_key
+    tele.verify.sms phone_number: @expected_phone_no,
              verify_code: @expected_verify_code,
              language: @expected_language
   end
@@ -58,11 +58,11 @@ class VerifyTest < Minitest::Test
             headers: @acceptance_headers).
         to_return(body: @expected_data, status: 200)
 
-    tele = Telesignature::Verify.new customer_id: @expected_cid,
+    tele = Telesignature::Api.new customer_id: @expected_cid,
                                      secret_key: @expected_secret_key,
                                      ssl: false
 
-    tele.sms phone_number: @expected_phone_no,
+    tele.verify.sms phone_number: @expected_phone_no,
              verify_code: @expected_verify_code,
              language: @expected_language
   end
@@ -77,8 +77,8 @@ class VerifyTest < Minitest::Test
             headers: @acceptance_headers).
         to_return(body: @expected_data, status: 200)
 
-    tele = Telesignature::Verify.new customer_id: @expected_cid, secret_key: @expected_secret_key
-    tele.call phone_number: @expected_phone_no,
+    tele = Telesignature::Api.new customer_id: @expected_cid, secret_key: @expected_secret_key
+    tele.verify.call phone_number: @expected_phone_no,
               verify_code: @expected_verify_code,
               language: @expected_language
   end
@@ -94,8 +94,8 @@ class VerifyTest < Minitest::Test
             headers: @acceptance_headers).
         to_return(body: @expected_data, status: 200)
 
-    tele = Telesignature::Verify.new customer_id: @expected_cid, secret_key: @expected_secret_key
-    tele.sms phone_number: @expected_phone_no,
+    tele = Telesignature::Api.new customer_id: @expected_cid, secret_key: @expected_secret_key
+    tele.verify.sms phone_number: @expected_phone_no,
              language: @expected_language
   end
 
@@ -109,8 +109,8 @@ class VerifyTest < Minitest::Test
             headers: @acceptance_headers).
         to_return(body: @expected_data, status: 200)
 
-    tele = Telesignature::Verify.new customer_id: @expected_cid, secret_key: @expected_secret_key
-    tele.call phone_number: @expected_phone_no,
+    tele = Telesignature::Api.new customer_id: @expected_cid, secret_key: @expected_secret_key
+    tele.verify.call phone_number: @expected_phone_no,
               language: @expected_language
   end
 
@@ -120,8 +120,8 @@ class VerifyTest < Minitest::Test
       with( headers: @acceptance_headers).
         to_return(body: @expected_data, status: 200)
 
-    tele = Telesignature::Verify.new customer_id: @expected_cid, secret_key: @expected_secret_key
-    tele.status @expected_ref_id
+    tele = Telesignature::Api.new customer_id: @expected_cid, secret_key: @expected_secret_key
+    tele.verify.status @expected_ref_id
   end
 
   def test_report_code
@@ -131,8 +131,8 @@ class VerifyTest < Minitest::Test
             headers: @acceptance_headers).
         to_return(body: @expected_data, status: 200)
 
-    tele = Telesignature::Verify.new customer_id: @expected_cid, secret_key: @expected_secret_key
-    tele.status @expected_ref_id, @expected_verify_code
+    tele = Telesignature::Api.new customer_id: @expected_cid, secret_key: @expected_secret_key
+    tele.verify.status @expected_ref_id, @expected_verify_code
   end
 
   # # @mock.patch.object(requests, "post")

@@ -8,7 +8,7 @@ module Telesignature
   autoload :Auth, 'telesignature/auth'
   autoload :Response, 'telesignature/response'
   autoload :Helpers, 'telesignature/helpers'
-  autoload :ServiceBase, 'telesignature/service_base'
   autoload :Verify, 'telesignature/verify'
   autoload :PhoneId, 'telesignature/phone_id'
+  autoload :Api, 'telesignature/api'
 end

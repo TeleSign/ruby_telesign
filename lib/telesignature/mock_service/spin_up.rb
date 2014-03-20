@@ -3,7 +3,7 @@ module Telesignature
     module SpinUp
       if ENV['TELESIGN_STUBBED']
         port = (ENV['TELESIGN_PORT'].to_i || 11989)
-        if `lsof -i :#{port}`.blank? # no process running on 11988
+        if `lsof -i :#{port}`.blank? # no process running on #port
           Process.detach(pid = Process.fork do
             require 'telesignature/mock_service/fake_server'
           end)

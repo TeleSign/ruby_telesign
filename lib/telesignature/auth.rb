@@ -5,13 +5,13 @@ require 'base64'
 require 'uri'
 require 'openssl'
 
+# NOTE: the following is the Telesign crew who made the python version
+#       from which this codes was inspired
+
 # __author__ = "Jeremy Cunningham, Michael Fox, and Radu Maierean"
 # __copyright__ = "Copyright 2012, TeleSign Corp."
 # __credits__ = ["Jeremy Cunningham", "Radu Maierean", "Michael Fox", "Nancy Vitug", "Humberto Morales"]
 # __license__ = "MIT"
-# __maintainer__ = "Jeremy Cunningham"
-# __email__ = "support@telesign.com"
-# __status__ = ""
 
 AUTH_METHOD = {
     sha1: {hash: OpenSSL::Digest::SHA1, name: 'HMAC-SHA1'},

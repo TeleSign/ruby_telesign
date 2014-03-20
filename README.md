@@ -82,7 +82,7 @@ p "##################"
 
 stubs mode
 =============
-If you're running this in a Rails app, there is a stubs mode Sintra app available.
+If you're running this in a Rails app, there is a stubs mode Sinatra app available.
 
 Enable it by setting ENV['TELESIGN_STUBBED'] to something truthy.
 

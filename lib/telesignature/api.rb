@@ -21,8 +21,6 @@ module Telesignature
     #    You can obtain both your Customer ID and Secret Key from the
     #    TeleSign Customer Portal <https://portal.telesign.com/account_profile_api_auth.php>
 
-    # """
-
     attr_accessor :verify, :phone_id
 
     def initialize opts = {}

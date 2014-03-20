@@ -6,7 +6,7 @@ require 'telesignature/version'
 Gem::Specification.new do |spec|
   spec.name          = 'telesignature'
   spec.version       = Telesignature::VERSION
-  spec.authors       = ['Andy Koch']
+  spec.authors       = ['Practice Fusion', 'Andy Koch']
   spec.email         = ['akoch@practicefusion.com']
   spec.description   = %q{Client gem for Telesign REST API}
   spec.summary       = %q{Client gem for Telesign REST API}

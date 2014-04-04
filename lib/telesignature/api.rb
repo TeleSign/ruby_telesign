@@ -36,7 +36,11 @@ module Telesignature
 
       @conn = Faraday.new(url: url) do |faraday|
         faraday.request  :url_encoded
-        faraday.response :logger                  # log requests to STDOUT
+        if defined? Rails
+          faraday.response :logger, Rails.logger
+        else
+          faraday.response :logger                  # log requests to STDOUT
+        end
         faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
       end
 

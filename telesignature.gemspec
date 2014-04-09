@@ -26,6 +26,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'guard'
   spec.add_development_dependency 'guard-minitest'
   spec.add_development_dependency 'pry'
-  spec.add_development_dependency 'pry-debugger'
+  spec.add_development_dependency 'pry-nav'
   spec.add_development_dependency 'mimic'
 end

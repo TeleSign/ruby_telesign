@@ -1,8 +1,4 @@
-require 'minitest/autorun'
-require 'pry'
-require 'telesignature'
-require 'webmock/minitest'
-
+require 'test_helper'
 
 class PhoneIdTest < Minitest::Test
   # Test for phone id telesign sdk

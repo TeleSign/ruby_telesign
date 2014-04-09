@@ -1,7 +1,4 @@
-require 'minitest/autorun'
-require 'pry'
-require 'telesignature'
-require 'webmock/minitest'
+require 'test_helper'
 
 class VerifyTest < Minitest::Test
   # Test for Verify telesign sdk
@@ -210,4 +207,3 @@ class VerifyTest < Minitest::Test
   #   assert_equal kwargs["proxies"]["https"], @expected_proxy, "Proxy did not match"
   # end
 end
-

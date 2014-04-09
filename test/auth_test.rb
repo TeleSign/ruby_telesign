@@ -1,6 +1,4 @@
-require 'minitest/autorun'
-require 'pry'
-require 'telesignature'
+require 'test_helper'
 
 class TestAuth < Minitest::Test
   def setup

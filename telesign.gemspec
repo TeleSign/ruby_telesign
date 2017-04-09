@@ -1,13 +1,13 @@
 Gem::Specification.new do |s|
   s.name = 'telesign'
-  s.version = '1.0.2'
+  s.version = '2.0.0'
+  s.add_runtime_dependency 'net-http-persistent', '~> 3.0', '>= 3.0.0'
   s.licenses = ['MIT']
-  s.date = '2016-11-22'
+  s.date = '2017-02-26'
   s.summary = 'TeleSign Ruby SDK'
   s.description = 'TeleSign Ruby SDK'
-  s.authors = ['Jarrad Lee']
-  s.email = 'jarrad@telesign.com'
-  s.files = ['lib/telesign.rb', 'lib/telesign/rest.rb']
-  s.homepage =
-      'http://rubygems.org/gems/telesign'
+  s.authors = ['TeleSign']
+  s.email = 'support@telesign.com'
+  s.files = Dir['lib/**/*rb']
+  s.homepage = 'http://rubygems.org/gems/telesign'
 end

@@ -1,181 +1,222 @@
-#
-# Copyright (c) 2016 TeleSign
-#
-# TeleSign Ruby SDK HMAC REST Auth.
-#
-
 require 'pp'
 require 'json'
 require 'time'
 require 'base64'
 require 'openssl'
-require 'net/http'
+require 'securerandom'
+require 'net/http/persistent'
 
 module Telesign
+  SDK_VERSION = '2.0.0'
 
-  module API
+  # The TeleSign RestClient is a generic HTTP REST client that can be extended to make requests against any of
+  # TeleSign's REST API endpoints.
+  #
+  # RequestEncodingMixin offers the function _encode_params for url encoding the body for use in string_to_sign outside
+  # of a regular HTTP request.
+  #
+  # See https://developer.telesign.com for detailed API documentation.
+  class RestClient
 
-    # == TeleSign Ruby SDK REST API Helper
-    #
-    # Telesign::API::Rest provides helper classes and functions
-    # to handle the HMAC REST authentication.
-    #
-    # You can use these helper functions directly or via the Telesign::API::PhoneId
-    # and Telesign::API::Verify classes. Please see the TeleSign REST API docs at
-    # http://docs.telesign.com/rest/index.html for implementation details.
-    #
-    class Rest
+    @user_agent = "TeleSignSDK/ruby-{#{SDK_VERSION} #{RUBY_DESCRIPTION} net/http/persistent"
 
-      # Creates a new Telesign::API::Rest object with the specified credentials
-      # and HTTP configuration.
-      # The +api_host+ should be a DNS hostname or IP address.
-      def initialize(customer_id,
-                     secret_key,
-                     ssl,
-                     api_host,
-                     timeout=nil)
+    # A simple HTTP Response object to abstract the underlying net/http library response.
 
-        @customer_id = customer_id
-        @secret_key = secret_key
-        @ssl = ssl
-        @base_uri = URI("http#{ssl ? 's' : ''}://#{api_host}")
-        @timeout = timeout
-        @user_agent = 'Net::HTTP TeleSignSDK/ruby-1.0.0'
-      end
+    # * +http_response+ - A net/http response object.
+    class Response
 
-      # Executes the REST API request based on the given configuration.
-      # See Telesign::API::PhoneId and Telesign::API::Verify for specific
-      # usage.
-      def execute(verb,
-                  resource,
-                  params=nil,
-                  form_data=nil,
-                  timeout=nil)
-
-        # generate the headers
-        headers = generate_auth_headers(
-            @customer_id,
-            @secret_key,
-            resource,
-            verb,
-            form_data.nil? ? nil : URI.encode_www_form(form_data))
-
-        uri = URI.join(@base_uri, resource)
-
-        # set query params
-        uri.query = URI.encode_www_form(params) unless params.nil?
-
-        # configure HTTP object
-        http = Net::HTTP.new(uri.host, uri.port)
-        http.use_ssl = @ssl
-
-        http.open_timeout = timeout.nil? ? @timeout : timeout
-        http.read_timeout = http.open_timeout
-        http.ssl_timeout = http.open_timeout
-        http.continue_timeout = http.open_timeout
-
-        #set headers
-        request = verb.new uri.request_uri
-        headers.each do |k, v|
-          request[k] = v
-        end
-
-        # set post data
-        request.set_form_data(form_data) unless form_data.nil?
-
-        # do the request
-        http_response = http.request(request)
-
-        # check response
-        unless http_response.is_a? Net::HTTPSuccess
-          if http_response.is_a? Net::HTTPUnauthorized
-            raise Telesign::API::AuthError.new(http_response)
-          else
-            raise Telesign::API::APIError.new(http_response)
-          end
-        end
-
-        Telesign::API::APIResponse.new(http_response)
-      end
-
-      # Function to generate the REST API authentication headers. A signature is
-      # computed based on the contents of the request and the client's secret key.
-      def generate_auth_headers (customer_id,
-                                 secret_key,
-                                 resource,
-                                 verb,
-                                 form_data=nil,
-                                 content_type='')
-
-        datetime_stamp = Time.now.utc.to_datetime.rfc822
-        nonce = rand.to_s
-
-        content_type = 'application/x-www-form-urlencoded' if verb == Net::HTTP::Post or verb == Net::HTTP::Put
-
-        string_to_sign = "#{verb.name.split('::').last.upcase}\n" +
-            "#{content_type}\n\n" +
-            "x-ts-auth-method:#{'HMAC-SHA256'}\n" +
-            "x-ts-date:#{datetime_stamp}\n" +
-            "x-ts-nonce:#{nonce}"
-
-        string_to_sign = "#{string_to_sign}\n#{form_data}" unless form_data.nil?
-
-        string_to_sign = string_to_sign + "\n#{resource}"
-
-        signature = Base64.encode64(OpenSSL::HMAC.digest(OpenSSL::Digest.new('sha256'),
-                                                         Base64.decode64(secret_key), string_to_sign)).chomp
-
-        {
-            'Authorization' => "TSA #{customer_id}:#{signature}",
-            'x-ts-date' => datetime_stamp,
-            'x-ts-auth-method' => 'HMAC-SHA256',
-            'x-ts-nonce' => nonce,
-            'User-Agent' => @user_agent
-        }
-      end
-    end
-
-    class APIResponse
-
-      attr_accessor :body, :headers, :status, :verify_code
-
-      def initialize(http_response,
-                     verify_code=nil)
-
-        @body = JSON.parse(http_response.body)
-        @headers = http_response.to_hash
-        @status = http_response.code
-        @verify_code = verify_code
-      end
-    end
-
-    class APIError < StandardError
-
-      attr_accessor :errors, :headers, :status, :body
+      attr_accessor :status_code, :headers, :body, :ok, :json
 
       def initialize(http_response)
-
-        @errors = JSON.parse(http_response.body)['errors']
+        @status_code = http_response.code
         @headers = http_response.to_hash
-        @status = http_response.code
         @body = http_response.body
-      end
+        @ok = http_response.kind_of? Net::HTTPSuccess
 
-      def to_s
-        result = ''
-        @errors.each do |error|
-          result = "#{result}#{error['description']}\n"
+        begin
+          @json = JSON.parse(http_response.body)
+        rescue JSON::JSONError
+          @json = nil
         end
-
-        result
       end
     end
 
-    class AuthError < Telesign::API::APIError
+    # TeleSign RestClient, useful for making generic RESTful requests against the API.
+    #
+    # * +customer_id+ - Your customer_id string associated with your account.
+    # * +secret_key+ - Your secret_key string associated with your account.
+    # * +api_host+ - (optional) Override the default api_host to target another endpoint string.
+    # * +timeout+ - (optional) How long to wait for the server to send data before giving up, as a float.
+    def initialize(customer_id,
+                   secret_key,
+                   api_host: 'https://rest-api.telesign.com',
+                   proxy: nil,
+                   timeout: 10)
 
-      def initialize(http_response)
-        super(http_response)
+      @customer_id = customer_id
+      @secret_key = secret_key
+      @api_host = api_host
+
+      @http = Net::HTTP::Persistent.new(name: 'telesign', proxy: proxy)
+
+      unless timeout.nil?
+        @http.open_timeout = timeout
+        @http.read_timeout = timeout
       end
+    end
+
+    # Generates the TeleSign REST API headers used to authenticate requests.
+    #
+    # Creates the canonicalized string_to_sign and generates the HMAC signature. This is used to authenticate requests
+    # against the TeleSign REST API.
+    #
+    # See https://developer.telesign.com/docs/authentication-1 for detailed API documentation.
+    #
+    # * +customer_id+ - Your account customer_id.
+    # * +secret_key+ - Your account secret_key.
+    # * +method_name+ - The HTTP method name of the request as a upper case string, should be one of 'POST', 'GET',
+    #   'PUT' or 'DELETE'.
+    # * +resource+ - The partial resource URI to perform the request against, as a string.
+    # * +url_encoded_fields+ - HTTP body parameters to perform the HTTP request with, must be a urlencoded string.
+    # * +date_rfc2616+ - The date and time of the request formatted in rfc 2616, as a string.
+    # * +nonce+ - A unique cryptographic nonce for the request, as a string.
+    # * +user_agent+ - (optional) User Agent associated with the request, as a string.
+    def self.generate_telesign_headers(customer_id,
+                                       secret_key,
+                                       method_name,
+                                       resource,
+                                       url_encoded_fields,
+                                       date_rfc2616: nil,
+                                       nonce: nil,
+                                       user_agent: nil)
+
+      if date_rfc2616.nil?
+        date_rfc2616 = Time.now.httpdate
+      end
+
+      if nonce.nil?
+        nonce = SecureRandom.uuid
+      end
+
+      content_type = (%w[POST PUT].include? method_name) ? 'application/x-www-form-urlencoded' : ''
+
+      auth_method = 'HMAC-SHA256'
+
+      string_to_sign = "#{method_name}"
+
+      string_to_sign << "\n#{content_type}"
+
+      string_to_sign << "\n#{date_rfc2616}"
+
+      string_to_sign << "\nx-ts-auth-method:#{auth_method}"
+
+      string_to_sign << "\nx-ts-nonce:#{nonce}"
+
+      if !content_type.empty? and !url_encoded_fields.empty?
+        string_to_sign << "\n#{url_encoded_fields}"
+      end
+
+      string_to_sign << "\n#{resource}"
+
+      digest = OpenSSL::Digest.new('sha256')
+      key = Base64.decode64(secret_key)
+
+      signature = Base64.encode64(OpenSSL::HMAC.digest(digest, key, string_to_sign)).strip
+
+      authorization = "TSA #{customer_id}:#{signature}"
+
+      headers = {
+          'Authorization': authorization,
+          'Date': date_rfc2616,
+          'x-ts-auth-method': auth_method,
+          'x-ts-nonce': nonce
+      }
+
+      unless user_agent.nil?
+        headers['User-Agent'] = user_agent
+      end
+
+      headers
+
+    end
+
+    # Generic TeleSign REST API POST handler.
+    #
+    # * +resource+ - The partial resource URI to perform the request against, as a string.
+    # * +params+ - Body params to perform the POST request with, as a hash.
+    def post(resource, **params)
+
+      execute(Net::HTTP::Post, 'POST', resource, **params)
+
+    end
+
+    # Generic TeleSign REST API GET handler.
+    #
+    # * +resource+ - The partial resource URI to perform the request against, as a string.
+    # * +params+ - Body params to perform the GET request with, as a hash.
+    def get(resource, **params)
+
+      execute(Net::HTTP::Get, 'GET', resource, **params)
+
+    end
+
+    # Generic TeleSign REST API PUT handler.
+    #
+    # * +resource+ - The partial resource URI to perform the request against, as a string.
+    # * +params+ - Body params to perform the PUT request with, as a hash.
+    def put(resource, **params)
+
+      execute(Net::HTTP::Put, 'PUT', resource, **params)
+
+    end
+
+    # Generic TeleSign REST API DELETE handler.
+    #
+    # * +resource+ - The partial resource URI to perform the request against, as a string.
+    # * +params+ - Body params to perform the DELETE request with, as a hash.
+    def delete(resource, **params)
+
+      execute(Net::HTTP::Delete, 'DELETE', resource, **params)
+
+    end
+
+    private
+    # Generic TeleSign REST API request handler.
+    #
+    # * +method_function+ - The net/http request to perform the request.
+    # * +method_name+ - The HTTP method name, as an upper case string.
+    # * +resource+ - The partial resource URI to perform the request against, as a string.
+    # * +params+ - Body params to perform the HTTP request with, as a hash.
+    def execute(method_function, method_name, resource, **params)
+
+      resource_uri = URI.parse("#{@api_host}#{resource}")
+
+      url_encoded_fields = URI.encode_www_form(params)
+
+      headers = RestClient.generate_telesign_headers(@customer_id,
+                                                     @secret_key,
+                                                     method_name,
+                                                     resource,
+                                                     url_encoded_fields,
+                                                     user_agent: @user_agent)
+
+      request = method_function.new(resource_uri.request_uri)
+
+      unless params.empty?
+        if %w[POST PUT].include? method_name
+          request.set_form_data(params)
+        else
+          resource_uri.query = url_encoded_fields
+        end
+      end
+
+      headers.each do |k, v|
+        request[k] = v
+      end
+
+      http_response = @http.request(resource_uri, request)
+
+      Response.new(http_response)
     end
   end
 end

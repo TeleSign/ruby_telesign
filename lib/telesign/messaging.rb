@@ -11,7 +11,7 @@ module Telesign
 
     # Send a message to the target phone_number.
     #
-    # See https://developer.telesign.com/v2.0/docs/messaging-api for detailed API documentation.
+    # See https://developer.telesign.com/docs/messaging-api for detailed API documentation.
     def message(phone_number, message, message_type, **params)
 
       self.post(MESSAGING_RESOURCE,
@@ -23,7 +23,7 @@ module Telesign
 
     # Retrieves the current status of the message.
     #
-    # See https://developer.telesign.com/v2.0/docs/messaging-api for detailed API documentation.
+    # See https://developer.telesign.com/docs/messaging-api for detailed API documentation.
     def status(reference_id, **params)
 
       self.get(MESSAGING_STATUS_RESOURCE % {:reference_id => reference_id},

@@ -10,7 +10,7 @@ module Telesign
     # Score is an API that delivers reputation scoring based on phone number intelligence, traffic patterns, machine
     # learning, and a global data consortium.
     #
-    # See https://developer.telesign.com/docs/rest_api-phoneid-score for detailed API documentation.
+    # See https://developer.telesign.com/docs/score-api for detailed API documentation.
     def score(phone_number, account_lifecycle_event, **params)
 
       self.post(SCORE_RESOURCE % {:phone_number => phone_number},

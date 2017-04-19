@@ -1,3 +1,12 @@
+.. image:: https://img.shields.io/travis/TeleSign/ruby_telesign.svg
+    :target: https://travis-ci.org/TeleSign/ruby_telesign
+
+.. image:: https://img.shields.io/gem/v/telesign.svg
+    :target: https://rubygems.org/gems/telesign
+
+.. image:: https://img.shields.io/github/license/TeleSign/ruby_telesign.svg
+    :target: https://github.com/TeleSign/ruby_telesign/blob/master/LICENSE
+
 ========
 TeleSign
 ========

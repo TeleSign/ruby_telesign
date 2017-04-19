@@ -1,5 +1,4 @@
-require 'test/unit'
-require_relative '../lib/telesign.rb'
+require 'helper'
 
 class TestRest < Test::Unit::TestCase
 
@@ -7,5 +6,4 @@ class TestRest < Test::Unit::TestCase
 
     puts Telesign::SDK_VERSION
   end
-
 end

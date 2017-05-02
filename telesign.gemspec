@@ -1,8 +1,8 @@
 Gem::Specification.new do |s|
   s.name                    = 'telesign'
-  s.version                 = '2.0.0'
+  s.version                 = '2.1.0'
   s.licenses                = ['MIT']
-  s.date                    = '2017-02-26'
+  s.date                    = '2017-05-2'
   s.summary                 = 'TeleSign Ruby SDK'
   s.description             = 'TeleSign Ruby SDK'
   s.authors                 = ['TeleSign']

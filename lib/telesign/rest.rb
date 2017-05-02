@@ -70,7 +70,7 @@ module Telesign
     # Creates the canonicalized string_to_sign and generates the HMAC signature. This is used to authenticate requests
     # against the TeleSign REST API.
     #
-    # See https://developer.telesign.com/docs/authentication-1 for detailed API documentation.
+    # See https://developer.telesign.com/docs/authentication for detailed API documentation.
     #
     # * +customer_id+ - Your account customer_id.
     # * +secret_key+ - Your account secret_key.

@@ -1,13 +1,13 @@
 require 'telesign'
 
-customer_id = 'customer_id'
-secret_key = 'secret_key'
+customer_id = 'FFFFFFFF-EEEE-DDDD-1234-AB1234567890'
+api_key = 'EXAMPLE----TE8sTgg45yusumoN6BYsBVkh+yRJ5czgsnCehZaOYldPJdmFh6NeX8kunZ2zU1YWaUw/0wV6xfw=='
 
 extra_digit = '0'
 phone_number = 'phone_number'
 incorrect_phone_number = "#{phone_number}#{extra_digit}"
 
-phoneid_client = Telesign::PhoneIdClient.new(customer_id, secret_key)
+phoneid_client = Telesign::PhoneIdClient.new(customer_id, api_key)
 response = phoneid_client.phoneid(incorrect_phone_number)
 
 if response.ok

@@ -44,17 +44,17 @@ module Telesign
     # TeleSign RestClient, useful for making generic RESTful requests against the API.
     #
     # * +customer_id+ - Your customer_id string associated with your account.
-    # * +secret_key+ - Your secret_key string associated with your account.
-    # * +api_host+ - (optional) Override the default api_host to target another endpoint string.
+    # * +api_key+ - Your api_key string associated with your account.
+    # * +rest_endpoint+ - (optional) Override the default rest_endpoint to target another endpoint.
     # * +timeout+ - (optional) How long to wait for the server to send data before giving up, as a float.
     def initialize(customer_id,
-                   secret_key,
-                   api_host: 'https://rest-api.telesign.com',
+                   api_key,
+                   rest_endpoint: 'https://rest-api.telesign.com',
                    proxy: nil,
                    timeout: 10)
 
       @customer_id = customer_id
-      @secret_key = secret_key
+      @api_key = api_key
       @api_host = api_host
 
       @http = Net::HTTP::Persistent.new(name: 'telesign', proxy: proxy)
@@ -73,7 +73,7 @@ module Telesign
     # See https://developer.telesign.com/docs/authentication for detailed API documentation.
     #
     # * +customer_id+ - Your account customer_id.
-    # * +secret_key+ - Your account secret_key.
+    # * +api_key+ - Your account api_key.
     # * +method_name+ - The HTTP method name of the request as a upper case string, should be one of 'POST', 'GET',
     #   'PUT' or 'DELETE'.
     # * +resource+ - The partial resource URI to perform the request against, as a string.
@@ -82,7 +82,7 @@ module Telesign
     # * +nonce+ - A unique cryptographic nonce for the request, as a string.
     # * +user_agent+ - (optional) User Agent associated with the request, as a string.
     def self.generate_telesign_headers(customer_id,
-                                       secret_key,
+                                       api_key,
                                        method_name,
                                        resource,
                                        url_encoded_fields,
@@ -119,7 +119,7 @@ module Telesign
       string_to_sign << "\n#{resource}"
 
       digest = OpenSSL::Digest.new('sha256')
-      key = Base64.decode64(secret_key)
+      key = Base64.decode64(api_key)
 
       signature = Base64.encode64(OpenSSL::HMAC.digest(digest, key, string_to_sign)).strip
 
@@ -194,7 +194,7 @@ module Telesign
       url_encoded_fields = URI.encode_www_form(params)
 
       headers = RestClient.generate_telesign_headers(@customer_id,
-                                                     @secret_key,
+                                                     @api_key,
                                                      method_name,
                                                      resource,
                                                      url_encoded_fields,

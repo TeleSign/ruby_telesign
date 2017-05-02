@@ -1,5 +1,11 @@
+.. image:: https://raw.github.com/TeleSign/ruby_telesign/master/sdk_banner.jpg
+    :target: https://developer.telesign.com
+
 .. image:: https://img.shields.io/travis/TeleSign/ruby_telesign.svg
     :target: https://travis-ci.org/TeleSign/ruby_telesign
+
+.. image:: https://img.shields.io/codecov/c/github/TeleSign/ruby_telesign.svg
+    :target: https://codecov.io/gh/TeleSign/ruby_telesign
 
 .. image:: https://img.shields.io/gem/v/telesign.svg
     :target: https://rubygems.org/gems/telesign
@@ -7,30 +13,22 @@
 .. image:: https://img.shields.io/github/license/TeleSign/ruby_telesign.svg
     :target: https://github.com/TeleSign/ruby_telesign/blob/master/LICENSE
 
-========
-TeleSign
-========
+=================
+TeleSign Ruby SDK
+=================
 
-TeleSign provides the world’s most comprehensive approach to account security for Web and mobile applications.
+TeleSign is a communications platform as a service (CPaaS) company, founded on security. Since 2005, TeleSign has
+been a trusted partner to the world’s leading websites and mobile applications, helping secure billions of end-user
+accounts. Today, TeleSign’s data-driven, cloud communications platform is changing the way businesses engage with
+customers and prevent fraud.
 
-For more information about TeleSign, visit the `TeleSign website <http://www.TeleSign.com>`_.
-
-TeleSign REST API: Ruby SDK
----------------------------
-
-**TeleSign web services** conform to the `REST Web Service Design Model
-<http://en.wikipedia.org/wiki/Representational_state_transfer>`_. Services are exposed as URI-addressable resources
-through the set of *RESTful* procedures in our **TeleSign REST API**.
-
-The **TeleSign Ruby SDK** is a set modules and functions — a *Ruby Library* that wraps the
-TeleSign REST API, and it simplifies TeleSign application development in the `Ruby programming language
-<https://www.ruby-lang.org>`_. The SDK software is distributed on
-`GitHub <https://github.com/TeleSign/ruby_telesign>`_ and also as a Ruby Gem using `Ruby Gems <https://rubygems.org>`_.
+For more information about TeleSign, visit our `website <http://www.TeleSign.com>`_.
 
 Documentation
 -------------
 
-Detailed documentation for TeleSign REST APIs is available in the `Developer Portal <https://developer.telesign.com/>`_.
+Code documentation is included in the SDK. Complete documentation, quick start guides and reference material
+for the TeleSign API is available within the `TeleSign Developer Center <https://developer.telesign.com/>`_.
 
 Installation
 ------------
@@ -41,48 +39,47 @@ To install the TeleSign Ruby SDK:
 
     $ gem install telesign
 
-Alternatively, you can download the project source, and execute **gem build telesign.gemspec && gem install telesign-[version].gem**.
+Authentication
+--------------
+
+You will need a Customer ID and API Key in order to use TeleSign’s API. If you already have an account you can retrieve
+them from your account dashboard within the `Portal <https://portal.telesign.com>`_. If you have not signed up yet, sign
+up `here <https://portal.telesign.com/signup>`_.
+
+Dependencies
+------------
+
+We make use of popular, feature-rich and well-tested open-source libraries to perform the underlying functionality of
+the SDK. These dependencies are managed by the community accepted package manager. If you are unable to add these
+additional third party dependencies to your project we have ensured that the SDK code is easy to read and can serve as
+sample code. We have also made sure that more complicated functions such as generate_telesign_headers can be easily
+extracted from the SDK and used 'as is' in your project.
 
 Ruby Code Example: Messaging
 ----------------------------
 
-Here's a basic code example with JSON response.
+Here is a basic code example with JSON response.
 
 .. code-block:: ruby
 
     require 'telesign'
 
-    customer_id = 'customer_id'
-    secret_key = 'secret_key'
+    customer_id = 'FFFFFFFF-EEEE-DDDD-1234-AB1234567890'
+    api_key = 'EXAMPLE----TE8sTgg45yusumoN6BYsBVkh+yRJ5czgsnCehZaOYldPJdmFh6NeX8kunZ2zU1YWaUw/0wV6xfw=='
 
     phone_number = 'phone_number'
     message = 'You\'re scheduled for a dentist appointment at 2:30PM.'
     message_type = 'ARN'
 
-    messaging_client = Telesign::MessagingClient.new(customer_id, secret_key)
+    messaging_client = Telesign::MessagingClient.new(customer_id, api_key)
     response = messaging_client.message(phone_number, message, message_type)
 
 .. code-block:: javascript
 
-    {"reference_id"=>"B56A497C9A74016489525132F8840634",
-     "status"=>
-      {"updated_on"=>"2017-03-03T04:13:14.028347Z",
-       "code"=>103,
-       "description"=>"Call in progress"}}
+    {'reference_id': 'DGFDF6E11AB86303ASDFD425BE00000657',
+     'status': {'code': 103,
+        'description': 'Call in progress',
+        'updated_on': '2016-12-12T00:39:58.325559Z'}}
 
-For more examples, see the examples folder or visit `TeleSign Developer Portal <https://developer.telesign.com/>`_.
-
-Authentication
---------------
-
-You will need a Customer ID and API Key in order to use TeleSign’s REST API. If you are already a customer and need an
-API Key, you can generate one in the `Portal <https://portal.telesign.com>`_.
-
-Testing
--------
-
-To run the Ruby SDK test suite:
-
-.. code-block:: bash
-
-    $ rake test
+For more examples, see the `examples <https://github.com/TeleSign/ruby_telesign/tree/master/examples>`_ folder or
+visit the `TeleSign Developer Center <https://developer.telesign.com/>`_.

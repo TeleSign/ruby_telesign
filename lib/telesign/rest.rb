@@ -126,10 +126,10 @@ module Telesign
       authorization = "TSA #{customer_id}:#{signature}"
 
       headers = {
-          'Authorization': authorization,
-          'Date': date_rfc2616,
-          'x-ts-auth-method': auth_method,
-          'x-ts-nonce': nonce
+          :'Authorization'=>authorization,
+          :'Date'=>date_rfc2616,
+          :'x-ts-auth-method'=>auth_method,
+          :'x-ts-nonce'=>nonce
       }
 
       unless user_agent.nil?

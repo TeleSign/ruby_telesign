@@ -55,7 +55,7 @@ module Telesign
 
       @customer_id = customer_id
       @api_key = api_key
-      @api_host = api_host
+      @rest_endpoint = rest_endpoint
 
       @http = Net::HTTP::Persistent.new(name: 'telesign', proxy: proxy)
 
@@ -189,7 +189,7 @@ module Telesign
     # * +params+ - Body params to perform the HTTP request with, as a hash.
     def execute(method_function, method_name, resource, **params)
 
-      resource_uri = URI.parse("#{@api_host}#{resource}")
+      resource_uri = URI.parse("#{@rest_endpoint}#{resource}")
 
       url_encoded_fields = URI.encode_www_form(params)
 

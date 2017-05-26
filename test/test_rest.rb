@@ -33,7 +33,7 @@ class TestRest < Test::Unit::TestCase
                                                                     nonce: nonce,
                                                                     user_agent: 'unit_test')
 
-    assert_equal(expected_authorization_header, actual_headers[:'Authorization'],
+    assert_equal(expected_authorization_header, actual_headers['Authorization'],
                  'Authorization header is not as expected')
   end
 
@@ -57,7 +57,7 @@ class TestRest < Test::Unit::TestCase
                                                                     nonce: nonce,
                                                                     user_agent: 'unit_test')
 
-    assert_equal(expected_authorization_header, actual_headers[:'Authorization'],
+    assert_equal(expected_authorization_header, actual_headers['Authorization'],
                  'Authorization header is not as expected')
   end
 
@@ -81,7 +81,7 @@ class TestRest < Test::Unit::TestCase
                                                                     nonce: nonce,
                                                                     user_agent: 'unit_test')
 
-    assert_equal(expected_authorization_header, actual_headers[:'Authorization'],
+    assert_equal(expected_authorization_header, actual_headers['Authorization'],
                  'Authorization header is not as expected')
   end
 
@@ -99,10 +99,10 @@ class TestRest < Test::Unit::TestCase
                                                                     resource,
                                                                     '')
 
-    assert_not_nil(UUID.validate(actual_headers[:'x-ts-nonce']), 'x-ts-nonce header is not a valid UUID')
+    assert_not_nil(UUID.validate(actual_headers['x-ts-nonce']), 'x-ts-nonce header is not a valid UUID')
 
     assert_nothing_raised do
-      Time.httpdate(actual_headers[:'Date'])
+      Time.httpdate(actual_headers['Date'])
     end
   end
 

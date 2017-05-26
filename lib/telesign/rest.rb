@@ -191,7 +191,7 @@ module Telesign
 
       resource_uri = URI.parse("#{@rest_endpoint}#{resource}")
 
-      url_encoded_fields = URI.encode_www_form(params)
+      url_encoded_fields = URI.encode_www_form(params, Encoding::UTF_8)
 
       headers = RestClient.generate_telesign_headers(@customer_id,
                                                      @api_key,

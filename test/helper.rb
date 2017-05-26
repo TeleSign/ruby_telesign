@@ -6,7 +6,10 @@ if ENV['CI'] == 'true'
   SimpleCov.formatter = SimpleCov::Formatter::Codecov
 end
 
+require 'uuid'
+require 'time'
 require 'test/unit'
+require 'webmock/test_unit'
 require 'mocha/setup'
 
 require 'telesign'

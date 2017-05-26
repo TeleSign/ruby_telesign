@@ -1,3 +1,7 @@
+2.1.2
+
+- changed generate_telesign_headers to use string hash keys to support ruby 2.2
+
 2.1.1
 
 - fixed issue renaming api_host to rest_endpoint

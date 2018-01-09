@@ -17,5 +17,10 @@ module Telesign
       self.post(PHONEID_RESOURCE % {:phone_number => phone_number},
                 **params)
     end
+
+    private
+    def content_type
+      "application/json"
+    end
   end
 end

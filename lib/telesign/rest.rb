@@ -85,7 +85,8 @@ module Telesign
                                        api_key,
                                        method_name,
                                        resource,
-                                       url_encoded_fields,
+                                       content_type,
+                                       encoded_fields,
                                        date_rfc2616: nil,
                                        nonce: nil,
                                        user_agent: nil)
@@ -98,7 +99,7 @@ module Telesign
         nonce = SecureRandom.uuid
       end
 
-      content_type = (%w[POST PUT].include? method_name) ? 'application/x-www-form-urlencoded' : ''
+      content_type = (%w[POST PUT].include? method_name) ? content_type : ''
 
       auth_method = 'HMAC-SHA256'
 
@@ -112,8 +113,8 @@ module Telesign
 
       string_to_sign << "\nx-ts-nonce:#{nonce}"
 
-      if !content_type.empty? and !url_encoded_fields.empty?
-        string_to_sign << "\n#{url_encoded_fields}"
+      if !content_type.empty? and !encoded_fields.empty?
+        string_to_sign << "\n#{encoded_fields}"
       end
 
       string_to_sign << "\n#{resource}"
@@ -191,24 +192,31 @@ module Telesign
 
       resource_uri = URI.parse("#{@rest_endpoint}#{resource}")
 
-      url_encoded_fields = URI.encode_www_form(params, Encoding::UTF_8)
+      request = method_function.new(resource_uri.request_uri)
+
+      unless params.empty?
+        if %w[POST PUT].include? method_name
+          if content_type == "application/x-www-form-urlencoded"
+            encoded_fields = URI.encode_www_form(params, Encoding::UTF_8)
+            request.set_form_data(params)
+          else
+            encoded_fields = params.to_json
+            request.body = encoded_fields
+            request.set_content_type("application/json")
+          end
+        else
+          encoded_fields = []
+          resource_uri.query = URI.encode_www_form(params, Encoding::UTF_8)
+        end
+      end
 
       headers = RestClient.generate_telesign_headers(@customer_id,
                                                      @api_key,
                                                      method_name,
                                                      resource,
-                                                     url_encoded_fields,
+                                                     content_type,
+                                                     encoded_fields,
                                                      user_agent: @user_agent)
-
-      request = method_function.new(resource_uri.request_uri)
-
-      unless params.empty?
-        if %w[POST PUT].include? method_name
-          request.set_form_data(params)
-        else
-          resource_uri.query = url_encoded_fields
-        end
-      end
 
       headers.each do |k, v|
         request[k] = v
@@ -217,6 +225,10 @@ module Telesign
       http_response = @http.request(resource_uri, request)
 
       Response.new(http_response)
+    end
+
+    def content_type
+      "application/x-www-form-urlencoded"
     end
   end
 end

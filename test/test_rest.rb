@@ -23,11 +23,13 @@ class TestRest < Test::Unit::TestCase
 
     expected_authorization_header = 'TSA FFFFFFFF-EEEE-DDDD-1234-AB1234567890:' +
         '2xVlmbrxLjYrrPun3G3WMNG6Jon4yKcTeOoK9DjXJ/Q='
+    content_type = "application/x-www-form-urlencoded"
 
     actual_headers = Telesign::RestClient.generate_telesign_headers(@customer_id,
                                                                     @api_key,
                                                                     method_name,
                                                                     resource,
+                                                                    content_type,
                                                                     body_params_url_encoded,
                                                                     date_rfc2616: date_rfc2616,
                                                                     nonce: nonce,
@@ -47,11 +49,13 @@ class TestRest < Test::Unit::TestCase
 
     expected_authorization_header = 'TSA FFFFFFFF-EEEE-DDDD-1234-AB1234567890:' +
         'h8d4I0RTxErbxYXuzCOtNqb/f0w3Ck8e5SEkGNj01+8='
+    content_type = "application/x-www-form-urlencoded"
 
     actual_headers = Telesign::RestClient.generate_telesign_headers(@customer_id,
                                                                     @api_key,
                                                                     method_name,
                                                                     resource,
+                                                                    content_type,
                                                                     body_params_url_encoded,
                                                                     date_rfc2616: date_rfc2616,
                                                                     nonce: nonce,
@@ -71,11 +75,13 @@ class TestRest < Test::Unit::TestCase
 
     expected_authorization_header = 'TSA FFFFFFFF-EEEE-DDDD-1234-AB1234567890:' +
         'aUm7I+9GKl3ww7PNeeJntCT0iS7b+EmRKEE4LnRzChQ='
+    content_type = "application/x-www-form-urlencoded"
 
     actual_headers = Telesign::RestClient.generate_telesign_headers(@customer_id,
                                                                     @api_key,
                                                                     method_name,
                                                                     resource,
+                                                                    content_type,
                                                                     body_params_url_encoded,
                                                                     date_rfc2616: date_rfc2616,
                                                                     nonce: nonce,
@@ -92,10 +98,12 @@ class TestRest < Test::Unit::TestCase
 
     expected_authorization_header = 'TSA FFFFFFFF-EEEE-DDDD-1234-AB1234567890:' +
         'aUm7I+9GKl3ww7PNeeJntCT0iS7b+EmRKEE4LnRzChQ='
+    content_type = "application/x-www-form-urlencoded"
 
     actual_headers = Telesign::RestClient.generate_telesign_headers(@customer_id,
                                                                     @api_key,
                                                                     method_name,
+                                                                    content_type,
                                                                     resource,
                                                                     '')
 

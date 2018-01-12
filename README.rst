@@ -39,6 +39,8 @@ To install the TeleSign Ruby SDK:
 
     $ gem install telesign
 
+Ruby **2+** is required for the TeleSign Ruby SDK.
+
 Authentication
 --------------
 

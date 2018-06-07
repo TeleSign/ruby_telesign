@@ -202,4 +202,36 @@ class TestRest < Test::Unit::TestCase
     assert_requested :delete, 'http://localhost/test/resource', headers: {'x-ts-nonce' => /.*\S.*/}
     assert_requested :delete, 'http://localhost/test/resource', headers: {'Date' => /.*\S.*/}
   end
+
+  def test_phoneid
+    stub_request(:post, 'localhost/v1/phoneid/1234567890').to_return(body: '{}')
+
+    client = Telesign::PhoneIdClient::new(@customer_id,
+                                          @api_key,
+                                          rest_endpoint: 'http://localhost')
+    client.phoneid('1234567890')
+    
+    assert_requested :post, 'http://localhost/v1/phoneid/1234567890'
+    assert_requested :post, 'http://localhost/v1/phoneid/1234567890', body: '{}'
+    assert_requested :post, 'http://localhost/v1/phoneid/1234567890', headers: {'Content-Type' => 'application/json'}
+    assert_requested :post, 'http://localhost/v1/phoneid/1234567890', headers: {'x-ts-auth-method' => 'HMAC-SHA256'}
+    assert_requested :post, 'http://localhost/v1/phoneid/1234567890', headers: {'x-ts-nonce' => /.*\S.*/}
+    assert_requested :post, 'http://localhost/v1/phoneid/1234567890', headers: {'Date' => /.*\S.*/}
+  end
+
+  def test_phoneid_with_addons
+    stub_request(:post, 'localhost/v1/phoneid/1234567890').to_return(body: '{}')
+
+    client = Telesign::PhoneIdClient::new(@customer_id,
+                                          @api_key,
+                                          rest_endpoint: 'http://localhost')
+    client.phoneid('1234567890', addons: {'contact': {}})
+
+    assert_requested :post, 'http://localhost/v1/phoneid/1234567890'
+    assert_requested :post, 'http://localhost/v1/phoneid/1234567890', body: '{"addons":{"contact":{}}}'
+    assert_requested :post, 'http://localhost/v1/phoneid/1234567890', headers: {'Content-Type' => 'application/json'}
+    assert_requested :post, 'http://localhost/v1/phoneid/1234567890', headers: {'x-ts-auth-method' => 'HMAC-SHA256'}
+    assert_requested :post, 'http://localhost/v1/phoneid/1234567890', headers: {'x-ts-nonce' => /.*\S.*/}
+    assert_requested :post, 'http://localhost/v1/phoneid/1234567890', headers: {'Date' => /.*\S.*/}
+  end
 end

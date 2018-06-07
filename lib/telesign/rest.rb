@@ -7,7 +7,7 @@ require 'securerandom'
 require 'net/http/persistent'
 
 module Telesign
-  SDK_VERSION = '2.2.1'
+  SDK_VERSION = '2.2.2'
 
   # The TeleSign RestClient is a generic HTTP REST client that can be extended to make requests against any of
   # TeleSign's REST API endpoints.
@@ -18,7 +18,7 @@ module Telesign
   # See https://developer.telesign.com for detailed API documentation.
   class RestClient
 
-    @user_agent = "TeleSignSDK/ruby-{#{SDK_VERSION} #{RUBY_DESCRIPTION} net/http/persistent"
+    @@user_agent = "TeleSignSDK/ruby-{#{SDK_VERSION} #{RUBY_DESCRIPTION} net/http/persistent"
 
     # A simple HTTP Response object to abstract the underlying net/http library response.
 
@@ -194,20 +194,20 @@ module Telesign
 
       request = method_function.new(resource_uri.request_uri)
 
-      unless params.empty?
-        if %w[POST PUT].include? method_name
-          if content_type == "application/x-www-form-urlencoded"
+      encoded_fields = ''
+      if %w[POST PUT].include? method_name
+        if content_type == "application/x-www-form-urlencoded"
+          unless params.empty?
             encoded_fields = URI.encode_www_form(params, Encoding::UTF_8)
             request.set_form_data(params)
-          else
-            encoded_fields = params.to_json
-            request.body = encoded_fields
-            request.set_content_type("application/json")
           end
         else
-          encoded_fields = []
-          resource_uri.query = URI.encode_www_form(params, Encoding::UTF_8)
+          encoded_fields = params.to_json
+          request.body = encoded_fields
+          request.set_content_type("application/json")
         end
+      else
+        resource_uri.query = URI.encode_www_form(params, Encoding::UTF_8)
       end
 
       headers = RestClient.generate_telesign_headers(@customer_id,
@@ -216,7 +216,7 @@ module Telesign
                                                      resource,
                                                      content_type,
                                                      encoded_fields,
-                                                     user_agent: @user_agent)
+                                                     user_agent: @@user_agent)
 
       headers.each do |k, v|
         request[k] = v

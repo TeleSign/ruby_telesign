@@ -140,7 +140,7 @@ class TestRest < Test::Unit::TestCase
     test_resource = '/test/resource'
     test_params = {:'test' => "123_\u03ff_test"}
 
-    stub_request(:get, 'localhost/test/resource').to_return(body: '{}')
+    stub_request(:get, 'localhost/test/resource?test=123_%CF%BF_test').to_return(body: '{}')
 
     client = Telesign::RestClient.new(@customer_id,
                                       @api_key,
@@ -148,15 +148,12 @@ class TestRest < Test::Unit::TestCase
 
     client.get(test_resource, **test_params)
 
-
-    assert_requested :get, 'http://localhost/test/resource'
-    # webmock doesn't seem to track query params...?
-    # assert_requested :get, 'http://localhost/test/resource', query: {'test' => '123_%CF%BF_test'}
-    assert_requested :get, 'http://localhost/test/resource', body: ''
-    assert_not_requested :get, 'http://localhost/test/resource', headers: {'Content-Type' => /.*\S.*/}
-    assert_requested :get, 'http://localhost/test/resource', headers: {'x-ts-auth-method' => 'HMAC-SHA256'}
-    assert_requested :get, 'http://localhost/test/resource', headers: {'x-ts-nonce' => /.*\S.*/}
-    assert_requested :get, 'http://localhost/test/resource', headers: {'Date' => /.*\S.*/}
+    assert_requested :get, 'http://localhost/test/resource?test=123_%CF%BF_test'
+    assert_requested :get, 'http://localhost/test/resource?test=123_%CF%BF_test', body: ''
+    assert_not_requested :get, 'http://localhost/test/resource?test=123_%CF%BF_test', headers: {'Content-Type' => /.*\S.*/}
+    assert_requested :get, 'http://localhost/test/resource?test=123_%CF%BF_test', headers: {'x-ts-auth-method' => 'HMAC-SHA256'}
+    assert_requested :get, 'http://localhost/test/resource?test=123_%CF%BF_test', headers: {'x-ts-nonce' => /.*\S.*/}
+    assert_requested :get, 'http://localhost/test/resource?test=123_%CF%BF_test', headers: {'Date' => /.*\S.*/}
   end
 
   def test_rest_client_put
@@ -185,7 +182,7 @@ class TestRest < Test::Unit::TestCase
     test_resource = '/test/resource'
     test_params = {:'test' => "123_\u03ff_test"}
 
-    stub_request(:delete, 'localhost/test/resource').to_return(body: '{}')
+    stub_request(:delete, 'localhost/test/resource?test=123_%CF%BF_test').to_return(body: '{}')
 
     client = Telesign::RestClient.new(@customer_id,
                                       @api_key,
@@ -193,14 +190,12 @@ class TestRest < Test::Unit::TestCase
 
     client.delete(test_resource, **test_params)
 
-    assert_requested :delete, 'http://localhost/test/resource'
-    # webmock doesn't seem to track query params...?
-    # assert_requested :get, 'http://localhost/test/resource', query: {'test' => '123_%CF%BF_test'}
-    assert_requested :delete, 'http://localhost/test/resource', body: ''
-    assert_not_requested :delete, 'http://localhost/test/resource', headers: {'Content-Type' => /.*\S.*/}
-    assert_requested :delete, 'http://localhost/test/resource', headers: {'x-ts-auth-method' => 'HMAC-SHA256'}
-    assert_requested :delete, 'http://localhost/test/resource', headers: {'x-ts-nonce' => /.*\S.*/}
-    assert_requested :delete, 'http://localhost/test/resource', headers: {'Date' => /.*\S.*/}
+    assert_requested :delete, 'http://localhost/test/resource?test=123_%CF%BF_test'
+    assert_requested :delete, 'http://localhost/test/resource?test=123_%CF%BF_test', body: ''
+    assert_not_requested :delete, 'http://localhost/test/resource?test=123_%CF%BF_test', headers: {'Content-Type' => /.*\S.*/}
+    assert_requested :delete, 'http://localhost/test/resource?test=123_%CF%BF_test', headers: {'x-ts-auth-method' => 'HMAC-SHA256'}
+    assert_requested :delete, 'http://localhost/test/resource?test=123_%CF%BF_test', headers: {'x-ts-nonce' => /.*\S.*/}
+    assert_requested :delete, 'http://localhost/test/resource?test=123_%CF%BF_test', headers: {'Date' => /.*\S.*/}
   end
 
   def test_phoneid

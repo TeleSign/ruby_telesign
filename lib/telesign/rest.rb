@@ -7,7 +7,7 @@ require 'securerandom'
 require 'net/http/persistent'
 
 module Telesign
-  SDK_VERSION = '2.2.3'
+  SDK_VERSION = '2.2.4'
 
   # The TeleSign RestClient is a generic HTTP REST client that can be extended to make requests against any of
   # TeleSign's REST API endpoints.
@@ -99,7 +99,7 @@ module Telesign
         nonce = SecureRandom.uuid
       end
 
-      content_type = (%w[POST PUT].include? method_name) ? content_type : ''
+      content_type = (%w[POST PUT DELETE].include? method_name) ? content_type : ''
 
       auth_method = 'HMAC-SHA256'
 
@@ -193,7 +193,7 @@ module Telesign
       resource_uri = URI.parse("#{@rest_endpoint}#{resource}")
 
       encoded_fields = ''
-      if %w[POST PUT].include? method_name
+      if %w[POST PUT DELETE].include? method_name
         request = method_function.new(resource_uri.request_uri)
         if content_type == "application/x-www-form-urlencoded"
           unless params.empty?

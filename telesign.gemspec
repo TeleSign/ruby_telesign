@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name                    = 'telesign'
-  s.version                 = '2.2.3'
+  s.version                 = '2.2.4'
   s.licenses                = ['MIT']
   s.date                    = '2017-05-25'
   s.summary                 = 'TeleSign Ruby SDK'
@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.files                   = Dir['lib/**/*rb']
   s.homepage                = 'http://rubygems.org/gems/telesign'
 
-  s.add_runtime_dependency 'net-http-persistent', '~> 3.0', '>= 3.0.0'
+  s.add_runtime_dependency 'net-http-persistent', '>= 3.0.0', '< 5.0'
 
   s.add_development_dependency 'rake'
   s.add_development_dependency 'uuid'

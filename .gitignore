@@ -4,6 +4,9 @@ coverage
 # RubyMine IDE
 .idea
 
+# Visual Studio Code IDE
+.vscode/
+
 # Other
 .DS_Store
 

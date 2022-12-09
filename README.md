@@ -29,7 +29,7 @@ Follow these steps to add this SDK as a dependency to your project.
 
 2. Install the SDK as a dependency in the top-level directory of your project using the command below. Once the SDK is installed, you should see a message in the terminal notifying you that you have successfully installed the SDK.
 
-`gem install telesign`
+    `gem install telesign`
 
 ## Authentication
 

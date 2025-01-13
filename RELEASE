@@ -1,3 +1,8 @@
+2.2.5
+
+- Update comments in both methods of messaging.rb class
+- Add a comment in RELEASE file
+
 2.2.4
 
 - Permits use of net-http-persistent 4.x.x

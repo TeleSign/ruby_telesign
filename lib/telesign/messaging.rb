@@ -9,7 +9,7 @@ module Telesign
   # or you can send verification messages containing one-time passcodes (OTP).
   class MessagingClient < RestClient
 
-    # Send a message to the target phone_number.
+    # Send a SMS message to the target phone_number.
     #
     # See https://developer.telesign.com/docs/messaging-api for detailed API documentation.
     def message(phone_number, message, message_type, **params)
@@ -21,7 +21,7 @@ module Telesign
                 **params)
     end
 
-    # Retrieves the current status of the message.
+    # Retrieves the current status of the SMS message.
     #
     # See https://developer.telesign.com/docs/messaging-api for detailed API documentation.
     def status(reference_id, **params)

@@ -21,7 +21,7 @@ module Telesign
                 **params)
     end
 
-    # Retrieves the status of an SMS transaction.
+    # Retrieve the status of an SMS transaction.
     #
     # See https://developer.telesign.com/docs/messaging-api for detailed API documentation.
     def status(reference_id, **params)

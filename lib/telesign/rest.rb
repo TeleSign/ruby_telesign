@@ -52,7 +52,7 @@ module Telesign
                    timeout: 10,
                    source: 'ruby_telesign',
                    sdk_version_origin: SDK_VERSION,
-                   sdkVersionDependency: nil)
+                   sdk_version_dependency: nil)
 
       @customer_id = customer_id
       @api_key = api_key
@@ -60,8 +60,8 @@ module Telesign
 
       @user_agent = "TeleSignSDK/ruby Ruby/#{RUBY_VERSION} net:http:persistent/#{Net::HTTP::VERSION} OriginatingSDK/#{source} SDKVersion/#{sdk_version_origin}"
 
-      if (source != 'ruby_telesign' && !sdkVersionDependency.nil?)
-        @user_agent += " DependencySDKVersion/#{sdkVersionDependency}"
+      if (source != 'ruby_telesign' && sdk_version_dependency.nil?)
+        @user_agent += " DependencySDKVersion/#{sdk_version_dependency}"
       end
 
       @http = Net::HTTP::Persistent.new(name: 'telesign', proxy: proxy)

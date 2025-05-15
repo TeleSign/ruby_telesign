@@ -60,7 +60,7 @@ module Telesign
 
       @user_agent = "TeleSignSDK/ruby Ruby/#{RUBY_VERSION} net:http:persistent/#{Net::HTTP::VERSION} OriginatingSDK/#{source} SDKVersion/#{sdk_version_origin}"
 
-      if (source != 'ruby_telesign' && sdk_version_dependency.nil?)
+      if (source != 'ruby_telesign' && !sdk_version_dependency.nil?)
         @user_agent += " DependencySDKVersion/#{sdk_version_dependency}"
       end
 

@@ -7,7 +7,7 @@ require 'securerandom'
 require 'net/http/persistent'
 
 module Telesign
-  SDK_VERSION = '2.2.4'
+  SDK_VERSION = '2.3.0'
 
   # The TeleSign RestClient is a generic HTTP REST client that can be extended to make requests against any of
   # TeleSign's REST API endpoints.
@@ -17,8 +17,6 @@ module Telesign
   #
   # See https://developer.telesign.com for detailed API documentation.
   class RestClient
-
-    @@user_agent = "TeleSignSDK/ruby-{#{SDK_VERSION} #{RUBY_DESCRIPTION} net/http/persistent"
 
     # A simple HTTP Response object to abstract the underlying net/http library response.
 
@@ -51,11 +49,20 @@ module Telesign
                    api_key,
                    rest_endpoint: 'https://rest-api.telesign.com',
                    proxy: nil,
-                   timeout: 10)
+                   timeout: 10,
+                   source: 'ruby_telesign',
+                   sdk_version_origin: SDK_VERSION,
+                   sdk_version_dependency: nil)
 
       @customer_id = customer_id
       @api_key = api_key
       @rest_endpoint = rest_endpoint
+
+      @user_agent = "TeleSignSDK/ruby Ruby/#{RUBY_VERSION} net:http:persistent/#{Net::HTTP::VERSION} OriginatingSDK/#{source} SDKVersion/#{sdk_version_origin}"
+
+      if (source != 'ruby_telesign' && sdk_version_dependency.nil?)
+        @user_agent += " DependencySDKVersion/#{sdk_version_dependency}"
+      end
 
       @http = Net::HTTP::Persistent.new(name: 'telesign', proxy: proxy)
 
@@ -216,7 +223,7 @@ module Telesign
                                                      resource,
                                                      content_type,
                                                      encoded_fields,
-                                                     user_agent: @@user_agent)
+                                                     user_agent: @user_agent)
 
       headers.each do |k, v|
         request[k] = v

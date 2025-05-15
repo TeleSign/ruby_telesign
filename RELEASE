@@ -1,3 +1,7 @@
+2.3.0
+
+- Added tracking to request
+
 2.2.5
 
 - Update comments in both methods of messaging.rb class

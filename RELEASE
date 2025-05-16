@@ -1,3 +1,7 @@
+2.3.1
+
+- Fixed logic code to add dependency version in user-agent value
+
 2.3.0
 
 - Added tracking to request

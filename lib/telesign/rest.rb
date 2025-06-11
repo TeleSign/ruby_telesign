@@ -5,9 +5,9 @@ require 'base64'
 require 'openssl'
 require 'securerandom'
 require 'net/http/persistent'
+require_relative "constants"
 
 module Telesign
-  SDK_VERSION = '2.3.0'
 
   # The TeleSign RestClient is a generic HTTP REST client that can be extended to make requests against any of
   # TeleSign's REST API endpoints.
@@ -51,7 +51,7 @@ module Telesign
                    proxy: nil,
                    timeout: 10,
                    source: 'ruby_telesign',
-                   sdk_version_origin: SDK_VERSION,
+                   sdk_version_origin: Telesign::SDK_VERSION,
                    sdk_version_dependency: nil)
 
       @customer_id = customer_id
@@ -82,7 +82,7 @@ module Telesign
     # * +customer_id+ - Your account customer_id.
     # * +api_key+ - Your account api_key.
     # * +method_name+ - The HTTP method name of the request as a upper case string, should be one of 'POST', 'GET',
-    #   'PUT' or 'DELETE'.
+    #   'PUT', 'PATCH' or 'DELETE'.
     # * +resource+ - The partial resource URI to perform the request against, as a string.
     # * +url_encoded_fields+ - HTTP body parameters to perform the HTTP request with, must be a urlencoded string.
     # * +date_rfc2616+ - The date and time of the request formatted in rfc 2616, as a string.
@@ -96,7 +96,8 @@ module Telesign
                                        encoded_fields,
                                        date_rfc2616: nil,
                                        nonce: nil,
-                                       user_agent: nil)
+                                       user_agent: nil,
+                                       auth_method: 'HMAC-SHA256')
 
       if date_rfc2616.nil?
         date_rfc2616 = Time.now.httpdate
@@ -106,32 +107,37 @@ module Telesign
         nonce = SecureRandom.uuid
       end
 
-      content_type = (%w[POST PUT].include? method_name) ? content_type : ''
+      content_type = (%w[POST PUT PATCH].include? method_name) ? content_type : ''
 
-      auth_method = 'HMAC-SHA256'
+      if auth_method == 'HMAC-SHA256'
 
-      string_to_sign = "#{method_name}"
+        string_to_sign = "#{method_name}"
 
-      string_to_sign << "\n#{content_type}"
+        string_to_sign << "\n#{content_type}"
 
-      string_to_sign << "\n#{date_rfc2616}"
+        string_to_sign << "\n#{date_rfc2616}"
 
-      string_to_sign << "\nx-ts-auth-method:#{auth_method}"
+        string_to_sign << "\nx-ts-auth-method:#{auth_method}"
 
-      string_to_sign << "\nx-ts-nonce:#{nonce}"
+        string_to_sign << "\nx-ts-nonce:#{nonce}"
 
-      if !content_type.empty? and !encoded_fields.empty?
-        string_to_sign << "\n#{encoded_fields}"
+        if !content_type.empty? and !encoded_fields.empty?
+          string_to_sign << "\n#{encoded_fields}"
+        end
+
+        string_to_sign << "\n#{resource}"
+
+        digest = OpenSSL::Digest.new('sha256')
+        key = Base64.decode64(api_key)
+
+        signature = Base64.encode64(OpenSSL::HMAC.digest(digest, key, string_to_sign)).strip
+
+        authorization = "TSA #{customer_id}:#{signature}"
+      else
+        credentials = Base64.strict_encode64("#{customer_id}:#{api_key}")
+        
+        authorization = "Basic #{credentials}"
       end
-
-      string_to_sign << "\n#{resource}"
-
-      digest = OpenSSL::Digest.new('sha256')
-      key = Base64.decode64(api_key)
-
-      signature = Base64.encode64(OpenSSL::HMAC.digest(digest, key, string_to_sign)).strip
-
-      authorization = "TSA #{customer_id}:#{signature}"
 
       headers = {
           'Authorization'=>authorization,
@@ -142,6 +148,10 @@ module Telesign
 
       unless user_agent.nil?
         headers['User-Agent'] = user_agent
+      end
+
+      if !content_type.empty?
+        headers['Content-Type'] = content_type
       end
 
       headers
@@ -188,6 +198,17 @@ module Telesign
 
     end
 
+    # Generic Telesign REST API PATCH handler.
+    #
+    # * +resource+ - The partial resource URI to perform the request against, as a string.
+    # * +auth_method+ - Method to auth.
+    # * +params+ - Body params to perform the PATCH request with, as a hash.
+    def patch(resource, auth_method: 'HMAC-SHA256', **params)
+
+      execute(Net::HTTP::Patch, 'PATCH', resource, auth_method: auth_method, **params)
+    
+    end
+
     private
     # Generic TeleSign REST API request handler.
     #
@@ -195,12 +216,12 @@ module Telesign
     # * +method_name+ - The HTTP method name, as an upper case string.
     # * +resource+ - The partial resource URI to perform the request against, as a string.
     # * +params+ - Body params to perform the HTTP request with, as a hash.
-    def execute(method_function, method_name, resource, **params)
+    def execute(method_function, method_name, resource, auth_method: 'HMAC-SHA256', **params)
 
       resource_uri = URI.parse("#{@rest_endpoint}#{resource}")
 
       encoded_fields = ''
-      if %w[POST PUT].include? method_name
+      if %w[POST PUT PATCH].include? method_name
         request = method_function.new(resource_uri.request_uri)
         if content_type == "application/x-www-form-urlencoded"
           unless params.empty?
@@ -223,7 +244,8 @@ module Telesign
                                                      resource,
                                                      content_type,
                                                      encoded_fields,
-                                                     user_agent: @user_agent)
+                                                     user_agent: @user_agent,
+                                                     auth_method: auth_method)
 
       headers.each do |k, v|
         request[k] = v

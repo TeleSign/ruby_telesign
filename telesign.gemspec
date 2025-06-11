@@ -1,11 +1,13 @@
+require_relative "lib/telesign/constants"
+
 Gem::Specification.new do |s|
   s.name                    = 'telesign'
-  s.version                 = '2.3.1'
+  s.version                 = Telesign::SDK_VERSION
   s.licenses                = ['MIT']
   s.date                    = '2017-05-25'
-  s.summary                 = 'TeleSign Ruby SDK'
-  s.description             = 'TeleSign Ruby SDK'
-  s.authors                 = ['TeleSign']
+  s.summary                 = 'Telesign Ruby SDK'
+  s.description             = 'Telesign Ruby SDK'
+  s.authors                 = ['Telesign']
   s.email                   = 'support@telesign.com'
   s.files                   = Dir['lib/**/*rb']
   s.homepage                = 'http://rubygems.org/gems/telesign'

@@ -1,6 +1,6 @@
 2.4.0
 
-- Added support for PATCH requests and support Basic auth
+- Added support for PATCH requests and Basic auth
 
 2.3.1
 

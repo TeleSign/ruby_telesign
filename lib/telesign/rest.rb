@@ -5,7 +5,7 @@ require 'base64'
 require 'openssl'
 require 'securerandom'
 require 'net/http/persistent'
-require_relative "constants"
+require_relative 'constants'
 
 module Telesign
 

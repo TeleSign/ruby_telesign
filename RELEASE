@@ -1,3 +1,7 @@
+3.0.0
+
+- Removed App Verify SDK
+
 2.4.0
 
 - Added support for PATCH requests and Basic auth

@@ -1,3 +1,3 @@
 module Telesign
-    SDK_VERSION = '2.4.0'
+    SDK_VERSION = '3.0.0'
 end

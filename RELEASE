@@ -1,5 +1,6 @@
 3.0.0
 
+- Added support for Intelligence Cloud to use new endpoint
 - Removed App Verify SDK
 
 2.4.0

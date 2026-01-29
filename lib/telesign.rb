@@ -1,4 +1,3 @@
-require 'telesign/appverify'
 require 'telesign/messaging'
 require 'telesign/phoneid'
 require 'telesign/rest'

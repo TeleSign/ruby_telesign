@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.homepage                = 'http://rubygems.org/gems/telesign'
 
   s.add_runtime_dependency 'net-http-persistent', '>= 3.0.0', '< 5.0'
-
+  s.add_runtime_dependency 'base64'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'uuid'
   s.add_development_dependency 'mocha'

@@ -2,6 +2,7 @@ require 'telesign/rest'
 
 DETECT_HOST = 'https://detect.telesign.com'
 INTELLIGENCE_RESOURCE = '/intelligence/phone'
+EMAIL_INTELLIGENCE_RESOURCE = '/intelligence/email'
 
 module Telesign
 
@@ -27,6 +28,31 @@ module Telesign
       params[:account_lifecycle_event] = account_lifecycle_event 
 
       self.post(INTELLIGENCE_RESOURCE, **params)
+    end
+
+    def email_intelligence(email_address, account_lifecycle_event, **params)
+      # Obtain a risk recommendation for this email address, as well as
+      # other relevant information using Email Intelligence API.
+      #
+      # Required parameters:
+      # - email_address
+      # - account_lifecycle_event ("create", "sign-in", "transact", "update", "delete")
+
+      if email_address.nil? || email_address.to_s.strip.empty?
+        raise ArgumentError, "email_address cannot be null or empty"
+      end
+
+      if account_lifecycle_event.nil? || account_lifecycle_event.to_s.strip.empty?
+        raise ArgumentError, "account_lifecycle_event cannot be null or empty"
+      end
+
+      email_address = email_address.to_s.strip.downcase
+      account_lifecycle_event = account_lifecycle_event.to_s.strip.downcase
+
+      params[:email_address] = email_address
+      params[:account_lifecycle_event] = account_lifecycle_event
+
+      post(EMAIL_INTELLIGENCE_RESOURCE, **params)
     end
   end
 end

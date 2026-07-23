@@ -52,4 +52,36 @@ class TestScore < Test::Unit::TestCase
     assert_raise(ArgumentError) { @score_client.score('phone_number', nil) }
     assert_raise(ArgumentError) { @score_client.score('phone_number', '') }
   end
+
+  def test_email_intelligence_success
+    email_address = 'USER@Example.COM'
+    account_lifecycle_event = 'CREATE'
+
+    stub_request(:post, "#{DETECT_HOST}/intelligence/email")
+      .with(
+        body: hash_including({
+          'email_address' => 'user@example.com',
+          'account_lifecycle_event' => 'create'
+        }),
+        headers: { 'Content-Type' => 'application/x-www-form-urlencoded' }
+      )
+      .to_return(
+        status: 200,
+        body: '{"risk": {"level": "medium", "recommendation": "review"}}',
+        headers: { 'Content-Type' => 'application/json' }
+      )
+
+    response = @score_client.email_intelligence(email_address, account_lifecycle_event)
+
+    assert response.ok
+    assert_equal 'medium', response.json['risk']['level']
+    assert_equal 'review', response.json['risk']['recommendation']
+  end
+
+  def test_email_intelligence_validation
+    assert_raise(ArgumentError) { @score_client.email_intelligence(nil, 'create') }
+    assert_raise(ArgumentError) { @score_client.email_intelligence('user@example.com', nil) }
+    assert_raise(ArgumentError) { @score_client.email_intelligence('', '') }
+  end
 end
+  

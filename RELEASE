@@ -1,3 +1,8 @@
+4.1.0
+
+- Adding support for Email Intelligence.
+- Added and reorganized unit tests.
+
 4.0.2
 
 - Testing the deployment system.

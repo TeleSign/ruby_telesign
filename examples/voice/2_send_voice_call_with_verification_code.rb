@@ -10,13 +10,13 @@ message = "Hello, your code is #{verify_code_with_commas}. Once again, your code
 message_type = 'OTP'
 
 voice_client = Telesign::VoiceClient.new(customer_id, api_key)
-response = voice_client.call(phone_number, message, message_type)
+voice_client.call(phone_number, message, message_type)
 
 print 'Please enter the verification code you were sent: '
 user_entered_verify_code = gets.strip
 
 if verify_code == user_entered_verify_code
-    puts 'Your code is correct.'
+  puts 'Your code is correct.'
 else
-    puts 'Your code is incorrect.'
+  puts 'Your code is incorrect.'
 end

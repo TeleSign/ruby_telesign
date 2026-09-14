@@ -8,7 +8,6 @@ require 'net/http/persistent'
 require_relative 'constants'
 
 module Telesign
-
   # The TeleSign RestClient is a generic HTTP REST client that can be extended to make requests against any of
   # TeleSign's REST API endpoints.
   #
@@ -17,19 +16,17 @@ module Telesign
   #
   # See https://developer.telesign.com for detailed API documentation.
   class RestClient
-
     # A simple HTTP Response object to abstract the underlying net/http library response.
 
     # * +http_response+ - A net/http response object.
     class Response
-
       attr_accessor :status_code, :headers, :body, :ok, :json
 
       def initialize(http_response)
         @status_code = http_response.code
         @headers = http_response.to_hash
         @body = http_response.body
-        @ok = http_response.kind_of? Net::HTTPSuccess
+        @ok = http_response.is_a? Net::HTTPSuccess
 
         begin
           @json = JSON.parse(http_response.body)
@@ -53,23 +50,20 @@ module Telesign
                    source: 'ruby_telesign',
                    sdk_version_origin: Telesign::SDK_VERSION,
                    sdk_version_dependency: nil)
-
       @customer_id = customer_id
       @api_key = api_key
       @rest_endpoint = rest_endpoint
 
       @user_agent = "TeleSignSDK/ruby Ruby/#{RUBY_VERSION} net:http:persistent/#{Net::HTTP::VERSION} OriginatingSDK/#{source} SDKVersion/#{sdk_version_origin}"
 
-      if (source != 'ruby_telesign' && !sdk_version_dependency.nil?)
-        @user_agent += " DependencySDKVersion/#{sdk_version_dependency}"
-      end
+      @user_agent += " DependencySDKVersion/#{sdk_version_dependency}" if source != 'ruby_telesign' && !sdk_version_dependency.nil?
 
       @http = Net::HTTP::Persistent.new(name: 'telesign', proxy: proxy)
 
-      unless timeout.nil?
-        @http.open_timeout = timeout
-        @http.read_timeout = timeout
-      end
+      return if timeout.nil?
+
+      @http.open_timeout = timeout
+      @http.read_timeout = timeout
     end
 
     # Generates the TeleSign REST API headers used to authenticate requests.
@@ -98,16 +92,11 @@ module Telesign
                                        nonce: nil,
                                        user_agent: nil,
                                        auth_method: 'HMAC-SHA256')
+      date_rfc2616 = Time.now.httpdate if date_rfc2616.nil?
 
-      if date_rfc2616.nil?
-        date_rfc2616 = Time.now.httpdate
-      end
+      nonce = SecureRandom.uuid if nonce.nil?
 
-      if nonce.nil?
-        nonce = SecureRandom.uuid
-      end
-
-      content_type = (%w[POST PUT PATCH].include? method_name) ? content_type : ''
+      content_type = %w[POST PUT PATCH].include?(method_name) ? content_type : ''
 
       if auth_method == 'HMAC-SHA256'
 
@@ -121,9 +110,7 @@ module Telesign
 
         string_to_sign << "\nx-ts-nonce:#{nonce}"
 
-        if !content_type.empty? and !encoded_fields.empty?
-          string_to_sign << "\n#{encoded_fields}"
-        end
+        string_to_sign << "\n#{encoded_fields}" if !content_type.empty? && !encoded_fields.empty?
 
         string_to_sign << "\n#{resource}"
 
@@ -135,27 +122,22 @@ module Telesign
         authorization = "TSA #{customer_id}:#{signature}"
       else
         credentials = Base64.strict_encode64("#{customer_id}:#{api_key}")
-        
+
         authorization = "Basic #{credentials}"
       end
 
       headers = {
-          'Authorization'=>authorization,
-          'Date'=>date_rfc2616,
-          'x-ts-auth-method'=>auth_method,
-          'x-ts-nonce'=>nonce
+        'Authorization' => authorization,
+        'Date' => date_rfc2616,
+        'x-ts-auth-method' => auth_method,
+        'x-ts-nonce' => nonce
       }
 
-      unless user_agent.nil?
-        headers['User-Agent'] = user_agent
-      end
+      headers['User-Agent'] = user_agent unless user_agent.nil?
 
-      if !content_type.empty?
-        headers['Content-Type'] = content_type
-      end
+      headers['Content-Type'] = content_type unless content_type.empty?
 
       headers
-
     end
 
     # Generic TeleSign REST API POST handler.
@@ -163,9 +145,7 @@ module Telesign
     # * +resource+ - The partial resource URI to perform the request against, as a string.
     # * +params+ - Body params to perform the POST request with, as a hash.
     def post(resource, **params)
-
       execute(Net::HTTP::Post, 'POST', resource, **params)
-
     end
 
     # Generic TeleSign REST API GET handler.
@@ -173,9 +153,7 @@ module Telesign
     # * +resource+ - The partial resource URI to perform the request against, as a string.
     # * +params+ - Body params to perform the GET request with, as a hash.
     def get(resource, **params)
-
       execute(Net::HTTP::Get, 'GET', resource, **params)
-
     end
 
     # Generic TeleSign REST API PUT handler.
@@ -183,9 +161,7 @@ module Telesign
     # * +resource+ - The partial resource URI to perform the request against, as a string.
     # * +params+ - Body params to perform the PUT request with, as a hash.
     def put(resource, **params)
-
       execute(Net::HTTP::Put, 'PUT', resource, **params)
-
     end
 
     # Generic TeleSign REST API DELETE handler.
@@ -193,9 +169,7 @@ module Telesign
     # * +resource+ - The partial resource URI to perform the request against, as a string.
     # * +params+ - Body params to perform the DELETE request with, as a hash.
     def delete(resource, **params)
-
       execute(Net::HTTP::Delete, 'DELETE', resource, **params)
-
     end
 
     # Generic Telesign REST API PATCH handler.
@@ -204,12 +178,11 @@ module Telesign
     # * +auth_method+ - Method to auth.
     # * +params+ - Body params to perform the PATCH request with, as a hash.
     def patch(resource, auth_method: 'HMAC-SHA256', **params)
-
       execute(Net::HTTP::Patch, 'PATCH', resource, auth_method: auth_method, **params)
-    
     end
 
     private
+
     # Generic TeleSign REST API request handler.
     #
     # * +method_function+ - The net/http request to perform the request.
@@ -217,13 +190,12 @@ module Telesign
     # * +resource+ - The partial resource URI to perform the request against, as a string.
     # * +params+ - Body params to perform the HTTP request with, as a hash.
     def execute(method_function, method_name, resource, auth_method: 'HMAC-SHA256', **params)
-
       resource_uri = URI.parse("#{@rest_endpoint}#{resource}")
 
       encoded_fields = ''
       if %w[POST PUT PATCH].include? method_name
         request = method_function.new(resource_uri.request_uri)
-        if content_type == "application/x-www-form-urlencoded"
+        if content_type == 'application/x-www-form-urlencoded'
           unless params.empty?
             encoded_fields = URI.encode_www_form(params, Encoding::UTF_8)
             request.set_form_data(params)
@@ -231,7 +203,7 @@ module Telesign
         else
           encoded_fields = params.to_json
           request.body = encoded_fields
-          request.set_content_type("application/json")
+          request.set_content_type('application/json')
         end
       else
         resource_uri.query = URI.encode_www_form(params, Encoding::UTF_8)
@@ -257,7 +229,7 @@ module Telesign
     end
 
     def content_type
-      "application/x-www-form-urlencoded"
+      'application/x-www-form-urlencoded'
     end
   end
 end

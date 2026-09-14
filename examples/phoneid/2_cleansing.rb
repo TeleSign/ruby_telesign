@@ -11,10 +11,7 @@ phoneid_client = Telesign::PhoneIdClient.new(customer_id, api_key)
 response = phoneid_client.phoneid(incorrect_phone_number)
 
 if response.ok
-    puts 'Cleansed phone number has country code %s and phone number is %s.' %
-        [response.json['numbering']['cleansing']['call']['country_code'],
-        response.json['numbering']['cleansing']['call']['phone_number']]
+  puts format('Cleansed phone number has country code %s and phone number is %s.', response.json['numbering']['cleansing']['call']['country_code'], response.json['numbering']['cleansing']['call']['phone_number'])
 
-    puts 'Original phone number was %s.' %
-        [response.json['numbering']['original']['complete_phone_number']]
+  puts format('Original phone number was %s.', response.json['numbering']['original']['complete_phone_number'])
 end

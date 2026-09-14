@@ -3,6 +3,7 @@ require_relative 'lib/telesign/constants'
 Gem::Specification.new do |s|
   s.name                    = 'telesign'
   s.version                 = Telesign::SDK_VERSION
+  s.required_ruby_version   = '>= 2.0'
   s.licenses                = ['MIT']
   s.date                    = '2017-05-25'
   s.summary                 = 'Telesign Ruby SDK'
@@ -12,13 +13,13 @@ Gem::Specification.new do |s|
   s.files                   = Dir['lib/**/*rb']
   s.homepage                = 'http://rubygems.org/gems/telesign'
 
-  s.add_runtime_dependency 'net-http-persistent', '>= 3.0.0', '< 5.0'
   s.add_runtime_dependency 'base64'
-  s.add_development_dependency 'rake'
-  s.add_development_dependency 'uuid'
-  s.add_development_dependency 'mocha'
-  s.add_development_dependency 'webmock'
+  s.add_runtime_dependency 'net-http-persistent', '>= 3.0.0', '< 5.0'
   s.add_development_dependency 'codecov'
+  s.add_development_dependency 'mocha', '>= 2.1.0'
+  s.add_development_dependency 'rake'
   s.add_development_dependency 'simplecov'
   s.add_development_dependency 'test-unit'
+  s.add_development_dependency 'uuid'
+  s.add_development_dependency 'webmock', '>= 3.18.0'
 end

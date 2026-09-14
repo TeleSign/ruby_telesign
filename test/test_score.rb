@@ -3,8 +3,7 @@ require 'webmock/test_unit'
 require 'telesign'
 
 class TestScore < Test::Unit::TestCase
-
-  DETECT_HOST = 'https://detect.telesign.com'
+  DETECT_HOST = 'https://detect.telesign.com'.freeze
 
   def setup
     @customer_id = 'FFFFFFFF-EEEE-DDDD-1234-AB1234567890'
@@ -19,9 +18,9 @@ class TestScore < Test::Unit::TestCase
     stub_request(:post, "#{DETECT_HOST}/intelligence/phone")
       .with(
         body: hash_including({
-          'phone_number' => phone_number,
-          'account_lifecycle_event' => account_lifecycle_event
-        }),
+                               'phone_number' => phone_number,
+                               'account_lifecycle_event' => account_lifecycle_event
+                             }),
         headers: { 'Content-Type' => 'application/x-www-form-urlencoded' }
       )
       .to_return(
@@ -30,9 +29,9 @@ class TestScore < Test::Unit::TestCase
         headers: { 'Content-Type' => 'application/json' }
       )
 
-    puts Telesign::ScoreClient.instance_method(:score).source_location  
+    puts Telesign::ScoreClient.instance_method(:score).source_location
     response = @score_client.score(phone_number, account_lifecycle_event)
-    
+
     puts "Response status code: #{response.status_code}"
     puts "Response headers: #{response.headers}"
     puts "Response body: #{response.body}"
@@ -60,9 +59,9 @@ class TestScore < Test::Unit::TestCase
     stub_request(:post, "#{DETECT_HOST}/intelligence/email")
       .with(
         body: hash_including({
-          'email_address' => 'user@example.com',
-          'account_lifecycle_event' => 'create'
-        }),
+                               'email_address' => 'user@example.com',
+                               'account_lifecycle_event' => 'create'
+                             }),
         headers: { 'Content-Type' => 'application/x-www-form-urlencoded' }
       )
       .to_return(
@@ -84,4 +83,3 @@ class TestScore < Test::Unit::TestCase
     assert_raise(ArgumentError) { @score_client.email_intelligence('', '') }
   end
 end
-  

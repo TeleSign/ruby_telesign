@@ -10,9 +10,9 @@ phoneid_client = Telesign::PhoneIdClient.new(customer_id, api_key)
 response = phoneid_client.phoneid(phone_number)
 
 if response.ok
-    if response.json['phone_type']['code'] == phone_type_voip
-        puts "Phone number #{phone_number} is a VOIP phone."
-    else
-        puts "Phone number #{phone_number} is not a VOIP phone."
-    end
+  if response.json['phone_type']['code'] == phone_type_voip
+    puts "Phone number #{phone_number} is a VOIP phone."
+  else
+    puts "Phone number #{phone_number} is not a VOIP phone."
+  end
 end

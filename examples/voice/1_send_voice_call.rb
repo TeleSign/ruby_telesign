@@ -8,4 +8,4 @@ message = 'You\'re scheduled for a dentist appointment at 2:30PM.'
 message_type = 'ARN'
 
 voice_client = Telesign::VoiceClient.new(customer_id, api_key)
-response = voice_client.call(phone_number, message, message_type)
+voice_client.call(phone_number, message, message_type)

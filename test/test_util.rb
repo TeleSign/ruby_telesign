@@ -1,7 +1,6 @@
 require 'helper'
 
 class TestUtil < Test::Unit::TestCase
-
   def test_verify_telesign_callback_signature
     api_key = Base64.strict_encode64('top_secret_key')
     json_str = '{"status":"delivered","reference_id":"ABC123"}'

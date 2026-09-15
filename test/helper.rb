@@ -10,9 +10,13 @@ require 'uuid'
 require 'time'
 require 'test/unit'
 require 'webmock/test_unit'
-require 'mocha/setup'
+require 'mocha/test_unit'
 
 require 'telesign'
 
-class Test::Unit::TestCase
+module Test
+  module Unit
+    class TestCase
+    end
+  end
 end
